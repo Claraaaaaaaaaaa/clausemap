@@ -19,7 +19,7 @@ Build mode: fast
   Learner check: Open the local app, enter a public GitHub repo URL, and inspect the repository observation; tell me whether the result and provenance are understandable.
   Commit: `Add live commit-pinned GitHub inspection foundation`
 
-- [ ] **2. The report distinguishes found, missing, and unverified planning files**
+- [x] **2. The report distinguishes found, missing, and unverified planning files**
   Becomes usable: Enter a repository URL and see four evidence-backed machine findings; open a finding to see the exact observation, pinned path or tree, official rule, limitation, and next action. A real recheck replaces findings from a fresh request and cannot be overwritten by an older response.
   Why now: This completes the unique kernel before visual refinement. The file decision rules are most valuable when their evidence can be inspected immediately.
   PRD ref: `prd.md > Live inspection and graphical overview`, `prd.md > Five status meanings`, `prd.md > Evidence Inspector and rule provenance`, `prd.md > Recheck and changed evidence`, `prd.md > States and Boundaries`

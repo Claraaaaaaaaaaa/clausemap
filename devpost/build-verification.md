@@ -27,7 +27,9 @@ Slice 2, Safari on `http://127.0.0.1:5173/`, 2026-10-23 03:03–03:04 UTC:
 
 ## Gate 3 — Fashion Noir interface
 
-Pending implementation and verification.
+Slice 3, Safari desktop on `http://127.0.0.1:5173/`, 2026-10-23 03:10–03:12 UTC: the V1.1-inspired Noir Pink landing displayed the large editorial headline, orbit, source URL input, and no fictitious report. Running `octocat/Hello-World` produced a seven-node graphical map with one live `Verified` repository, three live `Missing` files, and three explicitly unverified human-review nodes. The summary separated `Missing` and `Unable to verify` and stated that it is not certification. Opening `spec.md` showed the complete one-entry file-tree observation, pinned commit/tree SHA, official rule link, limitation, and add/push/recheck action. Safari's accessibility tree showed all seven nodes as buttons with status words and the Evidence Inspector as a dialog with initial focus on Close. The rendered desktop report and landing were visually inspected against the locked reference. The production source has no scenario selector, simulated fix, Blush switch, fabricated finding fixture, gradient, or italic CSS. Reduced-motion CSS suppresses animation and transitions.
+
+`npm run test`: 19 tests passed in 2 files. `npm run build`: TypeScript and Vite passed. A narrow-screen browser check and final keyboard focus-return check remain part of Gate 5; CSS mobile breakpoints are present but are not yet claimed as browser-verified.
 
 ## Gate 4 — end-to-end and manual review
 
