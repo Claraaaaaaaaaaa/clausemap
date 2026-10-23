@@ -36,6 +36,8 @@ jobs:
         run: |
           mkdir -p dist/bothsides
           cp sites/bothsides/index.html dist/bothsides/index.html
+      - name: Validate StateBridge JavaScript and demo controls
+        run: node scripts/check-statebridge.mjs
       - name: Include StateBridge static recovery demo
         run: |
           mkdir -p dist/statebridge
