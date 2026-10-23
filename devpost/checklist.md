@@ -61,23 +61,32 @@ Build mode: fast
 
 ## Hands-on Checkpoints
 
-- [ ] Early usable behavior explored — after slice 3, with live inspection and Fashion Noir visible
-- [ ] Final kick-the-tires exploration and feedback completed — after all slices and production verification
+- [x] Early usable behavior feedback received — the learner accepted the local MVP before public release; no detailed firsthand interaction log was supplied.
+- [x] Final live-version review and feedback completed — the learner accepted the deployed functionality and design on 2026-10-23 and requested no changes. Agent-run Safari and API checks are recorded separately in `build-verification.md`; no specific learner click path is claimed.
 
 ## Final Review
 
-- [ ] Final review complete — feedback resolved and learner confirms ready to ship
+- [x] Final review complete — the learner explicitly authorized ending `$5-build` on 2026-10-23, with no new feature requests and Fashion Noir V1.1 still locked.
 
 ## Code Tour and App Map
 
-- [ ] Learning activity complete — focused review of a real evidence-consistency or verification decision
-- [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
+- [x] Learning activity complete — a concise evidence-based recap of the complete-tree Missing threshold was delivered; this was not an interactive code tour.
+- [x] Optional edit and transfer reflection addressed — no edit was requested or performed; one optional transfer question was offered without requiring an answer.
 - [x] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
 
-Activity and evidence: pending learner wrap-up; the map records the complete-tree threshold from `spec.md`, `tests/inspection.test.ts`, and the live `octocat/Hello-World` observation.
-Route and stops: reference route prepared in `devpost/app-map.html`; interactive review pending.
-Edit outcome: pending
-Reflection: pending
-Activity mode: focused alternative for a plan-first learner; not yet performed with the learner.
+Activity and evidence: On 2026-10-23, a concise recap connected `scope.md > Failure Principles` and `spec.md > Data Model and State Transitions` to `buildMachineReport` in `src/inspectionEngine.ts`, `tests/inspection.test.ts`, and the live complete one-entry tree of `octocat/Hello-World`. It distinguished a supported `Missing` conclusion from a 404-driven `Unable to verify` result. The reusable practice is to define the evidence threshold for a strong claim before designing its status or UI.
+Route and stops: `devpost/app-map.html` provides a verified three-stop reference route through `src/App.tsx`, `src/githubClient.ts` / `src/inspectionEngine.ts`, and the Evidence Inspector. The learner was shown the map; an interactive source walkthrough was not claimed.
+Edit outcome: Not applicable; the learner requested no changes and Fashion Noir V1.1 remains locked.
+Reflection: One optional transfer question was offered; no response is required or presumed.
+Activity mode: concise evidence-based recap for an experienced plan-first learner, not hands-on practice.
 
 ## Revisions
+
+- The planned early checkpoint and final kick-the-tires prompts were consolidated in Fast Mode. The learner accepted the local MVP, then explicitly accepted the deployed functionality and design and approved `$5-build` closure. The record does not claim unreported learner interactions; concrete browser checks remain in `build-verification.md`.
+- Live publication and verification completed slice 5. No Scope, PRD, Spec, or Fashion Noir behavior changed during closeout.
+
+## $6-ship Handoff — Not Yet Complete
+
+- [ ] Choose and add an open-source `LICENSE` that matches the learner's actual authorization intent. The repository currently has no license file; the official rule treats a license as a recommendation, not an automated ClauseMap failure.
+- [ ] Prepare a controlled public test repository and capture a real continuous **Missing → push fix → Re-check → Verified** sequence for the final demo video. The current live evidence proves Missing and Verified on separate public repositories, not that continuous transition.
+- [ ] Review final competition materials with the learner before publishing them. No Devpost submission has been made.
