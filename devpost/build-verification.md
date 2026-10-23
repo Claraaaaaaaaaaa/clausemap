@@ -33,7 +33,9 @@ Slice 3, Safari desktop on `http://127.0.0.1:5173/`, 2026-10-23 03:10–03:12 UT
 
 ## Gate 4 — end-to-end and manual review
 
-Pending implementation and verification.
+Safari on `http://127.0.0.1:5173/`, 2026-10-23 03:14–03:15 UTC: entering `octocat/Hello-World` produced a real commit-pinned report; selecting the Demo video node opened official-rule context and an explicit self-report checkbox. Checking it changed only that node to `Self-confirmed`; the machine `Verified` count remained 1. Escape closed the inspector and returned keyboard focus to the selected map node. Reloading `?repo=octocat%2FHello-World` triggered a new live machine scan (timestamp changed from 03:14:32 to 03:14:54 UTC) while preserving the local declaration. Switching to `Thanatos9404/ruledost` produced four machine-Verified nodes and three `Needs confirmation` human nodes, proving the previous declaration did not transfer. Returning through an equivalent case/`.git` URL restored the original repo's declaration, and unchecking it returned to `Needs confirmation`.
+
+`npm run test`: 21 tests passed in 3 files, including storage isolation, equivalent URLs, undo, cleared storage, corrupt storage, and write failure. `npm run build`: TypeScript and Vite passed. Production machine reports are never stored in localStorage; URL state carries only repository identity.
 
 ## Gate 5 — production readiness
 

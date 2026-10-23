@@ -29,7 +29,7 @@ Build mode: fast
   Learner check: Open a real Missing finding, read its rule and next action, then recheck; say whether the distinction between evidence and uncertainty is clear.
   Commit: `Add evidence-backed file findings and real recheck`
 
-- [ ] **3. Fashion Noir makes the live inspection readable at a glance**
+- [x] **3. Fashion Noir makes the live inspection readable at a glance**
   Becomes usable: The real report appears in the locked Noir Pink editorial layout and seven-node graphical Inspection Map. Selecting a node opens the Evidence Inspector; desktop and narrow-screen layouts preserve the overview-first journey.
   Why now: The central behavior is already real, so visual and interaction work can be judged against actual states instead of the reference prototype's scenarios. Early learner feedback here can still shape the final presentation.
   PRD ref: `prd.md > Screens and Layout`, `prd.md > Look and Feel`, `prd.md > Live inspection and graphical overview`, `prd.md > Evidence Inspector and rule provenance`, `prd.md > States and Boundaries`
