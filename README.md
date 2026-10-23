@@ -2,6 +2,8 @@
 
 ClauseMap is a submission preflight inspector for **Build With AI: Basics**. Enter a public GitHub repository URL to check whether the repository can be read and whether `scope.md`, `prd.md`, and `spec.md` exist as regular files anywhere on its default branch. Each machine finding opens an Evidence Inspector with an observed fact, pinned commit or path, official-rule context, limitation, and next action.
 
+Live app: **https://claraaaaaaaaaaa.github.io/clausemap/**
+
 It checks **file presence, not document contents or overall compliance**. Video, eligibility, and the Devpost form require your own review. Self-confirmations are local browser declarations and never become machine-verified findings.
 
 ## Run locally
@@ -24,7 +26,7 @@ The public GitHub API must be reachable from the browser. Anonymous API rate lim
 
 ## GitHub Pages
 
-The included workflow builds with `VITE_BASE_PATH` set to `/<repository-name>/` and deploys `dist/` from `main` to project Pages. After creating a **public** GitHub repository and pushing this source, select **Settings → Pages → Build and deployment → GitHub Actions**. Publishing is a separate action; this local build does not create a remote repository or push code.
+The public repository is `Claraaaaaaaaaaa/clausemap`. GitHub Pages uses **GitHub Actions**; the included workflow builds with `VITE_BASE_PATH` set to `/<repository-name>/` and deploys `dist/` from `main` to project Pages. Pushing to `main` triggers a new deployment.
 
 For a local project-path production preview:
 

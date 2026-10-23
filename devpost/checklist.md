@@ -49,7 +49,7 @@ Build mode: fast
   Learner check: Confirm one manual item, refresh, switch repositories, return, and undo it; describe any point where the label feels like a machine guarantee.
   Commit: `Persist repository-isolated manual confirmations`
 
-- [ ] **5. The built app works from its public static URL**
+- [x] **5. The built app works from its public static URL**
   Becomes usable: A reviewer can open the GitHub Pages URL and run the full live preflight flow without an account or key, in addition to local use and the required later demo video.
   Why now: Hosting is the final end-to-end integration gate; it should expose asset-path, browser, and API failures after the product behavior is complete.
   PRD ref: `prd.md > The Core Journey`, `prd.md > Acceptance Criteria`
