@@ -47,3 +47,10 @@ Local production preparation, 2026-10-23 03:17–03:19 UTC:
 - A production-preview request for an intentionally unavailable public URL returned four `Unable to verify` machine findings, zero Missing/Verified, and an inspector explaining that GitHub's 404 does not establish whether the repo is nonexistent or invisible. No fallback mock appeared.
 - `npm run test`: 21 tests passed in 3 files. GitHub Pages workflow YAML parsed locally and follows Vite/GitHub's documented project Pages deployment pattern. The live GitHub Actions run, public Pages URL, and actual deployed-site refresh remain unverified because no remote or public release has been authorized. An owned public repo is also still needed to film a real Missing → fix → Verified transition.
 - Final local rerun at 03:20 UTC: 21 tests passed and the project-path production build passed. At this point, no remote operation had been attempted.
+
+## Public-release gate, 2026-10-23 03:46 UTC
+
+- Reviewed all 29 tracked paths and all six earlier commits plus the safety-cleanup commit before publication. No tracked or historical `devpost/learner-profile.md`, `.env*`, credentials, private keys, private contact details, or local absolute paths were found. Official planning documents remain tracked. The preserved HTML reference explicitly contains simulated prototype interactions; production `src/` and `index.html` have no mock-result fallback.
+- `agent/`, `.agents/`, `.claude/`, and `skills-lock.json` are local Skill Pack installation material, not required submission artifacts. They remain on disk but are ignored and untracked. The ignored `node_modules/` test-token file is also not tracked.
+- `Claraaaaaaaaaaa/clausemap` was not found through the connected GitHub metadata check. An official `gh auth login -h github.com -w` device flow reached GitHub CLI's OAuth authorization page, but account authorization was not completed. No remote repository, push, Pages setting, or deployment was attempted.
+- Final rerun: 21 tests passed; `VITE_BASE_PATH=/clausemap/ npm run build` passed. Public Pages and live production behavior remain unverified.
