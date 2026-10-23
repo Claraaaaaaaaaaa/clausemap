@@ -18,6 +18,13 @@ This file records observations from real checks. Test fixtures used later are id
 
 Slice 1 foundation, Safari on `http://127.0.0.1:5173/`, 2026-10-23 02:59 UTC: entered `https://github.com/octocat/Hello-World`; the app rendered `Public repository observed`, default branch `master`, commit `7fd1a60b01f91b314f59955a4e4d4e80d8edf11d`, root tree `b4eecafa9be2f2006ce1b709d6857b07069b4608`, one entry, Complete, and a metadata observation time. The result came after a visible in-progress state. `npm run build` passed with Vite 8.3.5 and TypeScript. Document findings are **not implemented or claimed** in this slice.
 
+Slice 2, Safari on `http://127.0.0.1:5173/`, 2026-10-23 03:03–03:04 UTC:
+
+- `Thanatos9404/ruledost` returned four `Verified` machine findings. The `scope.md` inspector observed `devpost/scope.md` at commit `3aacf2c5f5eeb2b8c005c653aeb5c656436f084e`, tree `1192e280682eb44ba5aaef4096e3ceca6eeedd9d`; the displayed GitHub source linked to that exact commit and path. This is a real nested-file case, not a test fixture.
+- `octocat/Hello-World` returned repository `Verified` and the three planning files `Missing`. The `spec.md` inspector explained that the complete recursive tree had one entry, cited commit `7fd1a60b01f91b314f59955a4e4d4e80d8edf11d`, tree `b4eecafa9be2f2006ce1b709d6857b07069b4608`, the official Project Requirements section, and the concrete add/push/recheck action.
+- A real Re-check of `octocat/Hello-World` replaced the report timestamp `03:04:10.656Z` with `03:04:18.221Z`; the same statuses remained because the repository did not change. The controller test also verifies that an older response arriving last cannot overwrite the newer run. A live Missing → fix → Verified sequence still requires an owned public demo repository; no such transition is claimed yet.
+- `npm run test`: 19 tests passed in 2 files, using deterministic HTTP fixtures only in tests. Cases cover nested files, complete absence, truncated tree partial presence, symlink, unpinned tree rejection, 404/403/429/409, rate headers, malformed tree, network error, timeout, URL normalization, and out-of-order runs. `npm run build`: passed (TypeScript + Vite 8.3.5).
+
 ## Gate 3 — Fashion Noir interface
 
 Pending implementation and verification.

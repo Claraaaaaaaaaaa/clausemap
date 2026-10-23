@@ -9,7 +9,7 @@ Build mode: fast
 
 ## Slices
 
-- [ ] **1. A real public repository produces its first inspectable observation**
+- [x] **1. A real public repository produces its first inspectable observation**
   Becomes usable: A minimal running app accepts a GitHub URL and reports the actual public-repository observation with source and time. The same first slice leaves a reproducible real-browser probe record for metadata → default-branch commit SHA → matching recursive tree SHA, including observed CORS and error behavior.
   Why now: This is the approved architecture's critical risk and the first part of ClauseMap's evidence kernel. Vite/React/TypeScript bootstrapping happens here, inside the first usable slice; no visual polish precedes the probe.
   PRD ref: `prd.md > The Core Journey` (steps 1–2), `prd.md > GitHub URL entry and first use`, `prd.md > Live inspection and graphical overview`

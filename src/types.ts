@@ -52,3 +52,75 @@ export interface GitHubInspection {
   tree?: TreeSnapshot
   failure?: ApiFailure
 }
+
+export interface RuleRef {
+  id: MachineId | ManualId
+  section: string
+  sourceUrl: string
+  obligation: 'must' | 'should'
+  summary: string
+  reviewedOn: string
+}
+
+export interface MachineFinding {
+  id: MachineId
+  title: string
+  status: MachineStatus
+  observation: string
+  observedAt: string
+  coverage: 'complete' | 'incomplete' | 'unavailable'
+  sourceUrl?: string
+  path?: string
+  commitSha?: string
+  treeSha?: string
+  limitation: string
+  nextAction: string
+  rule: RuleRef
+}
+
+export interface MachineReport {
+  runId: number
+  repositoryKey: string
+  fullName: string
+  defaultBranch?: string
+  commitSha?: string
+  treeSha?: string
+  checkedAt: string
+  findings: MachineFinding[]
+}
+
+export interface RuleRef {
+  id: MachineId | ManualId
+  section: string
+  sourceUrl: string
+  obligation: 'must' | 'should'
+  summary: string
+  reviewedOn: string
+}
+
+export interface MachineFinding {
+  id: MachineId
+  title: string
+  status: MachineStatus
+  observation: string
+  observedAt: string
+  coverage: 'complete' | 'incomplete' | 'unavailable'
+  sourceUrl?: string
+  path?: string
+  commitSha?: string
+  treeSha?: string
+  limitation: string
+  nextAction: string
+  rule: RuleRef
+}
+
+export interface MachineReport {
+  runId: number
+  repositoryKey: string
+  fullName: string
+  defaultBranch?: string
+  commitSha?: string
+  treeSha?: string
+  checkedAt: string
+  findings: MachineFinding[]
+}
