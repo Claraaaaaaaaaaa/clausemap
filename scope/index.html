@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="color-scheme" content="dark light" />
+<title>SCOPE — Shared Negotiation · Live Shared V0.9</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap');
+:root{--bg:#0d0910;--surface:#1a111b;--surface2:#241826;--ink:#faf0f6;--muted:#bea6b6;--line:#54374e;--pink:#fc55aa;--pinklight:#ffc2e0;--warn:#ffc198;--okay:#bde4d0;--mono:'DM Mono','SFMono-Regular',monospace;--body:'Space Grotesk',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;--display:'Syne','Arial Black',sans-serif;--client:#f5f0e9;--clientink:#272329;--clientmuted:#716b70;--clientline:#ddd3ce;--accent:#c95883}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{background:#080609;margin:0;color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}button,input,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--pink);outline-offset:3px}button[disabled]{opacity:.45;cursor:not-allowed}.mono{font-family:var(--mono)}[hidden]{display:none!important}
+.app{max-width:1460px;min-height:100vh;margin:0 auto;background:var(--bg);border-left:1px solid #342033;border-right:1px solid #342033}
+.global{position:sticky;top:0;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 35px;background:rgba(14,9,17,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}.logo{display:flex;align-items:center;gap:11px;min-width:0}.mark{font:800 26px var(--display);letter-spacing:-.09em}.miniSlash{display:block;height:22px;width:1px;background:var(--line)}.logoInfo{font:10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--pinklight);line-height:1.65}.actions{display:flex;gap:8px;align-items:center}.viewTabs{display:flex;padding:4px;border:1px solid var(--line);border-radius:100px;background:#1e1520}.viewTabs button{border:0;background:transparent;color:var(--muted);font:12px var(--mono);padding:11px 16px;border-radius:100px;white-space:nowrap}.viewTabs button.active{background:#f6e7ef;color:#261421}.headerBtn{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:100px;padding:12px 15px;font:12px var(--mono)}.headerBtn:hover{border-color:var(--pink)}
+.demoBanner{padding:10px 35px;border-bottom:1px solid #472942;display:flex;gap:10px;align-items:center;justify-content:space-between;background:#201322;color:#d6b4ca;font:11px var(--mono);line-height:1.65}.stepbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.stepbar span{white-space:nowrap}.stepbar i{font-style:normal;opacity:.42}
+.view{display:none}.view.active{display:block}.studioHero{padding:42px 48px 34px;border-bottom:1px solid var(--line);background:radial-gradient(ellipse 42% 90% at 96% 22%,#5a28434d,transparent 74%)}.eyebrow{font:11px var(--mono);letter-spacing:.18em;color:var(--pinklight);text-transform:uppercase}.studioHero h1{margin:18px 0 20px;font:800 clamp(52px,7.3vw,106px)/.91 var(--display);letter-spacing:-.09em}.studioHero h1 span{color:var(--pink)}.studioHero p{margin:0;color:var(--muted);font-size:16px;line-height:1.7;max-width:650px}.stage{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr)}.editorPane{border-right:1px solid var(--line);padding:28px 28px 40px 42px}.summaryPane{padding:28px 42px 40px 28px;background:linear-gradient(180deg,#2a1a292a,transparent 66%)}.sectionHead{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:0 0 17px}.sectionHead h2{font:500 11px var(--mono);letter-spacing:.12em;color:var(--pinklight);margin:0;text-transform:uppercase}.pill{font:10px var(--mono);border:1px solid var(--line);border-radius:50px;padding:9px 11px;color:var(--muted);white-space:nowrap}.box{background:var(--surface);border:1px solid var(--line);border-radius:23px;padding:21px;margin-bottom:18px}
+.baseline{display:flex;justify-content:space-between;gap:16px;align-items:center}.baseline .value{font-size:38px;line-height:1.1;font-weight:700;letter-spacing:-.055em}.baseline .meta{font-size:12px;line-height:1.7;color:var(--muted)}.tiny{font:10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--pinklight)}.textBtn{padding:9px 11px;border:1px solid var(--line);background:none;border-radius:50px;font:11px var(--mono);color:var(--pinklight);white-space:nowrap}.smallInputGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}.f label{font:10px var(--mono);text-transform:uppercase;color:var(--muted);display:block;margin-bottom:7px;line-height:1.5}.f input{width:100%;min-width:0;padding:10px 12px;background:#120c13;border:1px solid #724763;border-radius:11px;color:var(--ink);font-size:20px;font-weight:700}
+.request{position:relative}.request h3{margin:0 0 12px;color:var(--pinklight);font:11px var(--mono);letter-spacing:.12em}.request .titleInput{width:100%;border:0;border-bottom:1px solid #825371;border-radius:0;background:none;color:var(--ink);font-weight:700;font-size:22px;padding:4px 0 9px}.request textarea{width:100%;min-height:72px;resize:vertical;background:#120c13;color:var(--ink);border:1px solid #593851;border-radius:12px;padding:12px 14px;margin-top:14px;font-size:13px;line-height:1.6}.hint{font-size:12px;color:var(--muted);line-height:1.7;margin:12px 0 0}
+.mixer{padding:0;overflow:hidden}.mixerHeader{padding:18px 21px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);gap:10px}.mixerHeader h2{font:11px var(--mono);text-transform:uppercase;color:var(--pinklight);letter-spacing:.13em;margin:0}.sliderCard{padding:23px 21px;border-bottom:1px solid #4b3245}.sliderCard:last-child{border-bottom:0}.sliderTitle{display:flex;justify-content:space-between;align-items:baseline;gap:12px}.sliderTitle label{font-weight:700;font-size:18px}.sliderValue{display:flex;flex-direction:column;align-items:flex-end;font-weight:700;font-size:36px;line-height:1.03;white-space:nowrap;letter-spacing:-.06em}.sliderValue small{font-size:12px;letter-spacing:0;font-weight:500;color:var(--muted);margin-top:5px}.sliderDesc{color:var(--muted);font-size:12px;line-height:1.7;margin:7px 0 20px}.range{width:100%;height:9px;appearance:none;-webkit-appearance:none;background:linear-gradient(90deg,var(--pink) var(--fill,50%),#382337 var(--fill,50%));border:1px solid #7f5277;border-radius:999px;cursor:pointer}.range::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:var(--pink);border:3px solid #ffe0ee;box-shadow:0 0 0 7px #fc55aa28}.range::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--pink);border:3px solid #ffe0ee;box-shadow:0 0 0 7px #fc55aa28}.limits{display:flex;justify-content:space-between;color:#aa8ea4;font:12px var(--mono);margin-top:13px}.reference{margin:12px 0 0;color:#d8b0c8;font-size:11px;line-height:1.7}.inlineButton{margin-left:8px;background:none;border:none;border-bottom:1px solid var(--pink);color:var(--pinklight);padding:0 0 1px;font:11px var(--mono)}.health{margin-top:13px;padding:14px 16px;border:1px solid #4e3b4b;border-radius:17px;display:flex;align-items:flex-start;gap:12px;background:#1c161c}.health .icon{width:22px;height:22px;flex-shrink:0;display:grid;place-items:center;border-radius:50%;font-size:12px}.health.good .icon{background:#bde4d01b;color:var(--okay)}.health.warn .icon{background:#ffc19821;color:var(--warn)}.health strong{display:block;font-size:12px;margin-bottom:3px}.health p{margin:0;color:var(--muted);font-size:11px;line-height:1.65}
+.resultBillboard{border:1px solid #ac658f;border-radius:24px;background:linear-gradient(145deg,#3c2234,#271625 78%);padding:25px 24px 22px}.resultBillboard .bigMoney{font:800 clamp(54px,6vw,96px)/.94 var(--display);letter-spacing:-.1em;margin:14px 0 10px}.resultBillboard .explain{font-size:13px;color:#e8bfd4;line-height:1.6}.detailsGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}.miniStat{background:#19111a;border:1px solid var(--line);border-radius:18px;padding:17px}.miniStat h3{font:11px var(--mono);color:var(--muted);margin:0 0 10px}.miniStat strong{font-size:26px}.miniStat p{font-size:11px;color:var(--muted);margin:6px 0 0}.sendbox{margin-top:17px;background:#1b131d;border:1px solid var(--line);border-radius:24px;padding:23px}.sendbox h3{font-size:18px;margin:0 0 9px}.sendbox p{font-size:12px;line-height:1.7;color:var(--muted);margin:0 0 17px}.primary{border:0;border-radius:13px;background:var(--pink);color:#270f1e;padding:15px 20px;font-weight:700;font-size:13px;min-height:48px}.primary:hover{background:#ff84c1}.secondary{border:1px solid var(--line);border-radius:13px;background:transparent;color:var(--ink);padding:14px 18px;font-size:12px;min-height:48px}.secondary:hover{background:#312030}.btnRow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.full{width:100%}.badgeDot{width:7px;height:7px;display:inline-block;background:var(--pink);border-radius:50%;margin-right:8px}.activity{margin-top:18px}.activityRow{display:flex;align-items:start;gap:12px;padding:15px 0;border-bottom:1px solid #4c3046;font-size:12px}.activityRow:first-of-type{border-top:1px solid #4c3046}.activityRow:last-child{border-bottom:0}.activityRow .dot{width:9px;height:9px;border:2px solid var(--pink);border-radius:50%;flex-shrink:0;margin-top:4px}.activityRow .time{font:10px var(--mono);color:var(--muted);margin-top:6px}.stateBadge{color:var(--pinklight);border:1px solid var(--line);padding:7px 9px;border-radius:999px;font:10px var(--mono)}.previewNote{font:11px var(--mono);color:#b18caa;padding:16px 43px;border-top:1px solid #4a2a40;line-height:1.8}
+/* Client Surface */
+#clientView{background:var(--client);color:var(--clientink);min-height:calc(100vh - 104px);font-family:'DM Sans','PingFang SC','Microsoft YaHei',sans-serif}.clientHeader{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--clientline);padding:30px clamp(24px,5vw,80px);gap:20px}.northLogo{display:flex;gap:15px;align-items:center}.northShape{height:40px;width:40px;border-radius:50%;background:#2b252c;color:#f9e8f0;display:grid;place-items:center;font:700 25px var(--display)}.northName{font:700 18px 'DM Sans',sans-serif;letter-spacing:-.04em}.northSub{font:10px var(--mono);letter-spacing:.1em;color:#746c73;margin-top:3px}.clientStatus{border:1px solid #d2b8c4;padding:9px 13px;border-radius:999px;color:#8e506d;font:11px var(--mono)}.clientMain{width:min(100%,880px);margin:0 auto;padding:60px 28px 100px}.cEyebrow{color:#a45277;font:11px var(--mono);text-transform:uppercase;letter-spacing:.15em}.clientMain h1{font:800 clamp(40px,6vw,70px)/1.02 var(--display);letter-spacing:-.068em;margin:18px 0 16px}.clientLead{max-width:650px;color:var(--clientmuted);font-size:16px;line-height:1.75;margin:0 0 26px}.projectMeta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:29px}.projectMeta span{border:1px solid var(--clientline);border-radius:999px;padding:9px 13px;color:#675d65;font-size:12px}.clientCard{background:#fffdfa;border:1px solid #e4d9d4;border-radius:24px;box-shadow:0 14px 50px #402c2820;overflow:hidden}.clientBlock{padding:25px 29px;border-bottom:1px solid var(--clientline)}.clientBlock:last-child{border-bottom:0}.cSmall{font:11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:#a15578}.clientBlock h2{font-size:19px;margin:10px 0 6px}.clientBlock p{color:var(--clientmuted);font-size:13px;line-height:1.75;margin:5px 0}.deliverables{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.deliverables span{border:1px solid #e3d9d5;background:#faf6f3;border-radius:8px;padding:7px 10px;font-size:12px;color:#615960}.cRows{margin-top:8px}.cRow{display:flex;justify-content:space-between;align-items:baseline;padding:12px 0;gap:20px;border-bottom:1px solid #eee5e1;font-size:14px}.cRow:last-child{border-bottom:0}.cRow span{color:#716a71}.cRow strong{font-size:16px}.cRow.emphasis{align-items:center;padding-top:19px}.cRow.emphasis span{color:#282329;font-weight:700}.cRow.emphasis strong{font:800 35px var(--display);letter-spacing:-.07em}.clientAccent{color:#ac4878!important}.clientActions{margin-top:26px;padding:25px 29px;border:1px solid #ded1cc;background:#fffdfa;border-radius:24px}.clientActions h2{margin:0 0 8px;font-size:18px}.clientActions p{font-size:13px;line-height:1.7;color:var(--clientmuted);margin:0 0 20px}.cPrimary{background:#2b252c;color:#fff8f9;border:0;padding:16px 20px;border-radius:12px;font-weight:700;font-size:13px;min-height:50px}.cPrimary:hover{background:#4b303f}.cOutline{border:1px solid #d5c7c4;color:#3f343e;background:#fffdfa;border-radius:12px;padding:14px 18px;font-weight:600;font-size:13px;min-height:50px}.cOutline:hover{background:#f4e9ed}.cLink{background:none;border:0;padding:13px 4px;color:#765e6b;text-decoration:underline;text-underline-offset:4px;font-size:13px}.clientDecision{margin-top:20px;background:#f8f1ef;border:1px solid #dfcdc9;border-radius:15px;padding:19px}.clientDecision label{display:block;font-size:12px;color:#665e65;margin-bottom:8px}.clientDecision textarea{width:100%;border:1px solid #d6cac7;background:#fffdfa;border-radius:10px;padding:13px 15px;resize:vertical;min-height:90px;line-height:1.6;color:#302a30}.clientDecision .priceInput{width:160px;padding:10px 12px;background:#fffdfa;border:1px solid #d6cac7;border-radius:9px;color:#302a30;font-weight:700}.clientDecision .cPrimary{margin-top:14px}.cConfirmation{border-radius:20px;padding:25px;background:#fffdfa;border:1px solid #ddd0cb;margin-top:25px}.cConfirmation h3{font-size:22px;margin:6px 0 10px}.cConfirmation p{color:#6b636b;font-size:14px;line-height:1.7}.clientFooter{font:11px var(--mono);color:#8d8086;margin-top:34px;line-height:1.8}.invitation{margin-top:16px;background:#f8f4ef;color:#393035;border-radius:16px;border:1px solid #d9c6cc;padding:18px}.invitation .title{font-weight:700}.invitation .copy{font-size:12px;line-height:1.7;color:#6a6066;margin:8px 0 14px}.invitation .buttonFake{display:inline-flex;background:#282329;color:white;padding:11px 14px;border-radius:8px;font-size:12px;font-weight:700}
+@media(max-width:1120px){.stage{grid-template-columns:1fr}.editorPane{border-right:0;border-bottom:1px solid var(--line);padding:25px 35px}.summaryPane{padding:25px 35px}.studioHero{padding:36px}.resultBillboard .bigMoney{font-size:72px}}
+@media(max-width:680px){.global{padding:12px 16px;flex-wrap:wrap}.logoInfo{display:none}.actions{gap:5px}.headerBtn{padding:10px 11px}.viewTabs button{padding:10px 11px;font-size:10px}.demoBanner{padding:10px 16px}.stepbar{font-size:9px}.studioHero{padding:32px 19px}.studioHero h1{font-size:54px}.editorPane,.summaryPane{padding:22px 18px}.baseline{align-items:flex-start;flex-wrap:wrap}.smallInputGrid{grid-template-columns:1fr}.sliderCard{padding:20px 17px}.sliderTitle{align-items:flex-start;flex-direction:column}.sliderValue{align-items:flex-start}.detailsGrid{grid-template-columns:1fr}.previewNote{padding:16px 20px}.clientHeader{padding:22px 18px}.northName{font-size:16px}.clientStatus{font-size:9px}.clientMain{padding:42px 16px 72px}.clientBlock{padding:22px 19px}.clientActions{padding:22px 19px}.cRow.emphasis strong{font-size:29px}}
+@media(prefers-reduced-motion:no-preference){.primary,.cPrimary,.secondary,.cOutline,.headerBtn{transition:background-color .15s ease,transform .15s ease}.primary:active,.cPrimary:active{transform:scale(.985)}}
+
+/* V0.8 client shared negotiation lab */
+.clientShared{background:#fdfaf7;border:1px solid #ded1d5;border-radius:27px;padding:28px;margin:25px 0 20px;box-shadow:0 16px 35px #2b1a2510}
+.cSharedEyebrow{font:11px var(--mono);letter-spacing:.16em;color:#a13b6c;text-transform:uppercase}
+.cSharedHeading{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-top:12px}
+.cSharedHeading h2{font:800 clamp(28px,4vw,47px)/1.02 var(--display);letter-spacing:-.06em;color:var(--clientink);margin:0}
+.cSharedHeading p{color:#6d636a;line-height:1.65;font-size:13px;max-width:470px;margin:12px 0 0}
+.cSharedChip{padding:9px 12px;border:1px solid #cfaebd;border-radius:30px;color:#9d4c77;white-space:nowrap;font:10px var(--mono)}
+.cBaselineRow{border-top:1px solid var(--clientline);border-bottom:1px solid var(--clientline);padding:13px 2px;margin:20px 0;display:flex;gap:12px;justify-content:space-between;color:#60575e;font:11px var(--mono)}
+.cBaselineRow b{color:#3a2c35;font-weight:600}
+.cMixerGrid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:20px;align-items:start}
+.cControls{border:1px solid #e1d2d8;border-radius:21px;overflow:hidden;background:#fff}
+.cControl{padding:20px 19px;border-bottom:1px solid #eadde2}.cControl:last-child{border-bottom:0}
+.cControlTop{display:flex;align-items:center;justify-content:space-between;gap:12px}.cControlTop label{font-weight:700;font-size:14px;color:#382e35}
+.cControlBig{color:#2e202a;font-size:clamp(25px,3vw,37px);font-weight:700;letter-spacing:-.05em;white-space:nowrap}
+.cControlBig small{display:block;font:11px var(--mono);letter-spacing:0;color:#8a7481;margin-top:3px;text-align:right}
+.cControlInfo{color:#817781;font-size:11px;line-height:1.6;margin:7px 0 15px;max-width:400px}
+.cRange{width:100%;height:9px;appearance:none;-webkit-appearance:none;background:linear-gradient(90deg,#be477d var(--fill,50%),#e8d8df var(--fill,50%));border:0;border-radius:90px;cursor:pointer}
+.cRange::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:26px;height:26px;background:#dc4a92;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 5px #dc4a9224,0 2px 8px #80315255}
+.cRange::-moz-range-thumb{width:21px;height:21px;background:#dc4a92;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 5px #dc4a9224}
+.cBounds{display:flex;justify-content:space-between;color:#998b94;font:10px var(--mono);margin-top:13px}
+.cResult{background:#2e1c2c;border-radius:22px;padding:25px 23px;color:#fff;box-shadow:0 14px 32px #57254129}
+.cResult .cSharedEyebrow{color:#ffc9e3}
+.cResult strong.heroMoney{font:800 clamp(47px,5vw,73px)/.98 var(--display);letter-spacing:-.075em;display:block;margin:14px 0 7px;color:#fff;overflow-wrap:anywhere}
+.cResult .sub{font-size:12px;line-height:1.6;color:#e6c6d8}
+.cProof{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
+.cProofItem{border:1px solid #694660;border-radius:13px;padding:12px}.cProofItem span{display:block;color:#e4b9d0;font:10px var(--mono);text-transform:uppercase;margin-bottom:8px}.cProofItem strong{font-size:25px;letter-spacing:-.05em}
+.cNotice{border:1px solid #ad6c8b;border-radius:15px;background:#482b3f;margin-top:15px;padding:13px;color:#ffdee9;font-size:12px;line-height:1.6}
+.cNotice.good{background:#33253a;border-color:#66495f}
+.cNotice p{margin:0}
+.cAdjustBtns{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.cAdjustBtns button{border:1px solid #ca98b1;background:#fff;color:#81365f;padding:9px 12px;border-radius:12px;font-size:11px;cursor:pointer}
+.cExplain{margin-top:17px;padding:16px 19px;border:1px solid #e5d7db;border-radius:18px;background:#f7f0f2;color:#665960;font-size:12px;line-height:1.8}
+.cExplain b{color:#a54372}
+.cNewLabel{font:11px var(--mono);letter-spacing:.12em;color:#af507c;margin:0 0 13px;text-transform:uppercase}
+.sharedDecision{background:#fff;border:1px solid #ddd0d6;border-radius:24px;padding:25px;margin-top:21px}
+.sharedDecision h2{font:800 28px/1.1 var(--display);margin:0 0 10px;color:#2c2530;letter-spacing:-.04em}
+.sharedDecision>p{font-size:13px;line-height:1.7;color:#70636c;margin:0 0 18px}
+.sharedActionGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.sharedActionGrid button{min-height:48px}
+.clientCommentLabel{display:block;font:11px var(--mono);margin:17px 0 9px;color:#8b5071}
+.sharedDecision textarea{width:100%;min-height:88px;resize:vertical;background:#fcfaf9;border:1px solid #d8c6d1;border-radius:12px;padding:13px 15px;color:#342a32;line-height:1.55}
+.sharedDecision textarea:focus-visible{outline:3px solid #e3accd}
+.cHonesty{margin-top:16px;color:#887a82;font:11px var(--mono);line-height:1.65}
+.studioCounter{margin-top:16px;border:1px solid #bb729e;border-radius:22px;padding:18px;background:linear-gradient(135deg,#392036,#221725)}
+.studioCounter strong{display:block;font-size:18px;margin:9px 0;color:#fff}.studioCounter p{margin:0 0 12px;color:#e0bfd2;line-height:1.6;font-size:12px;white-space:pre-wrap}
+.studioCounter .btnRow{display:flex;gap:8px;flex-wrap:wrap}.studioCounter .primary{padding:12px 16px}
+@media(max-width:950px){.cMixerGrid{grid-template-columns:1fr}}
+@media(max-width:680px){.clientShared{padding:18px 15px}.cSharedHeading{display:block}.cSharedChip{display:inline-block;margin-top:14px}.cBaselineRow{flex-direction:column;gap:7px}.cControlTop{align-items:flex-start}.cControlBig{font-size:26px}.cProof{grid-template-columns:1fr}.sharedActionGrid{grid-template-columns:1fr}.sharedDecision{padding:22px 18px}}
+
+
+.liveShare{margin:18px 30px 0;padding:17px 21px;border-radius:20px;background:#24172a;border:1px solid #955b82;box-shadow:0 8px 30px #140a1528;color:#fbe9f2}
+.liveShareTop{display:flex;align-items:center;gap:11px;flex-wrap:wrap}.liveShareTop strong{font-size:13px;font-weight:700}.liveShareTop button{margin-left:auto;padding:8px 14px;font-size:11px}
+.liveDot{height:9px;width:9px;border-radius:999px;background:#fc55aa;box-shadow:0 0 0 4px #fc55aa25}.liveShare p{color:#d9bfd2;font-size:12px;line-height:1.65;margin:8px 0 10px}
+.liveLinks{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:10px}.liveLinks label{font:11px var(--mono);color:#ffbdda;letter-spacing:.06em;display:block}.liveLinks input{margin-top:7px;width:100%;border:1px solid #74465c;color:#fbeff4;background:#160e19;padding:11px;border-radius:10px;font:11px var(--mono)}
+.liveLinks button{border-radius:11px;padding:11px 14px;white-space:nowrap}.liveShare[data-role="client"]{background:#f9f0f6;color:#4e2844;border-color:#bc7f9c}.liveShare[data-role="client"] p{color:#775f72}.liveShare[data-role="client"] .liveDot{background:#c95883}
+@media(max-width:700px){.liveShare{margin:10px 13px 0;padding:14px}.liveLinks{grid-template-columns:1fr}.liveShareTop button{margin-left:0}}
+</style>
+<script>
+/* GitHub Pages adapter for the original SCOPE V0.9 user interface.
+   Demo state is shared across tabs within ONE browser only. No server, authentication,
+   cross-device persistence or legally binding approvals. */
+(()=>{'use strict';
+const nativeFetch=window.fetch.bind(window), STORAGE='scope-github-pages-preview-v1';
+function read(){try{return JSON.parse(localStorage.getItem(STORAGE)||'{}')}catch{return {}}}
+function save(x){localStorage.setItem(STORAGE,JSON.stringify(x))}
+function rnd(){const a=new Uint8Array(32);crypto.getRandomValues(a);return btoa(String.fromCharCode(...a)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'')}
+function event(type,detail){return {type,detail,time:new Date().toISOString().slice(11,19),timestamp:Math.floor(Date.now()/1000)}}
+function error(status,detail){return new Response(JSON.stringify({detail}),{status,headers:{'Content-Type':'application/json'}})}
+function ok(data,status=200){return new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json'}})}
+function snap(s,role){const o={version:s.version,offer:s.offer,response:s.response,updated_at:s.updated_at};if(role==='studio')o.history=s.history;return o}
+function validated(o,v){const fee=+o.fee,hours=+o.hours,days=+o.days,work=+o.work,quote=+o.quote,finalDays=+o.finalDays;if(!(fee>=100&&hours>0&&days>0&&work>=0&&work<=24&&quote>=fee&&finalDays>=days&&Number.isFinite(work)))return null;const rate=fee/hours,capacity=hours/days;return {...o,fee,hours,days,work,quote,finalDays,rate,capacity,recommended:fee+work*rate,minDays:Math.ceil((hours+work)/capacity-1e-9),version:v}}
+window.fetch=async function(input,opts={}){
+const u=typeof input==='string'?input:input?.url;if(!u?.startsWith('/api/'))return nativeFetch(input,opts);
+try{
+const method=(opts.method||'GET').toUpperCase(),seg=u.split('/').filter(Boolean),all=read(),now=Math.floor(Date.now()/1000);let body={};if(opts.body)body=JSON.parse(opts.body);
+if(method==='POST'&&seg.length===2&&seg[1]==='sessions'){
+ const offer=validated(body,1);if(!offer)return error(422,'Invalid proposal. Check original budget, extra scope and delivery.');
+ const studio=rnd(),client=rnd(),id=rnd();all[id]={studio,client,offer,version:1,response:null,history:[event('published',{version:1})],updated_at:now};save(all);
+ return ok({studio_token:studio,client_token:client,snapshot:snap(all[id],'studio')},201)
+}
+if(seg.length<3||!['studio','client'].includes(seg[1]))return error(404,'Unknown preview endpoint');
+const role=seg[1],token=decodeURIComponent(seg[2]);let id=Object.keys(all).find(x=>all[x][role]===token);if(!id)return error(404,'This demo link belongs to a different browser or has expired. GitHub Pages cannot sync between devices.');
+const s=all[id];if(method==='GET'&&seg.length===3)return ok(snap(s,role));
+if(role==='studio'&&method==='POST'&&seg[3]==='publish'){
+ if(s.response?.type==='accepted')return error(409,'Accepted proposals are locked. Start a new negotiation.');
+ const offer=validated(body,s.version+1);if(!offer)return error(422,'Invalid proposal.');
+ s.version++;s.offer=offer;s.response=null;s.history.unshift(event('published',{version:s.version}));s.updated_at=now;save(all);return ok(snap(s,'studio'))
+}
+if(role==='client'&&method==='POST'&&seg[3]==='respond'){
+ if(body.version!==s.version)return error(409,'A newer proposal exists. Refresh before responding.');
+ if(s.response!==null)return error(409,'This version already has a response.');
+ if(!['accepted','revision','declined'].includes(body.type))return error(422,'Unknown response type.');
+ let detail={};if(body.type==='revision'){
+ const d=body.detail||{},work=+d.work,price=+d.price,days=+d.days;
+ if(!Number.isInteger(work)||work<0||work>24||!Number.isFinite(price)||price<s.offer.fee||price>20000000||!Number.isInteger(days)||days<s.offer.days||days>100000)return error(422,'Proposal cannot reduce the original contracted fee or delivery period.');
+ detail={work,price,days,message:String(d.message||'').slice(0,1000)}
+ }
+ s.response={type:body.type,detail,version:s.version};s.history.unshift(event(body.type,detail));s.updated_at=now;save(all);return ok(snap(s,'client'))
+}
+return error(405,'Action not permitted for this link');
+}catch(e){return error(500,'Browser preview error: '+String(e?.message||e))}
+};
+})();
+
+</script>
+</head>
+<body>
+<div class="app">
+<header class="global">
+  <div class="logo"><span class="mark">SCOPE<span style="color:var(--pink)">.</span></span><i class="miniSlash"></i><span class="logoInfo">Change proposal<br>Live collaboration / V0.9</span></div>
+  <div class="actions">
+    <div class="viewTabs" role="group" aria-label="预览角色"><button id="studioTab" class="active" type="button">① STUDIO</button><button id="clientTab" type="button">② CLIENT VIEW</button></div>
+    <button type="button" id="langBtn" class="headerBtn">EN</button>
+    <button type="button" id="resetBtn" class="headerBtn" data-i="reset">重置</button>
+  </div>
+</header>
+<div class="demoBanner"><span id="demoNote">● 交互概念验证 · 同一浏览器模拟双端流程；没有真实发送或电子签署。</span><span class="stepbar" id="stepbar"><span>01 准备报价</span><i>→</i><span>02 客户审阅</span><i>→</i><span>03 反馈回传</span></span></div>
+
+<section class="liveShare" id="liveShare" aria-live="polite">
+ <div class="liveShareTop"><span class="liveDot"></span><strong id="liveStatus">Ready to create a live negotiation</strong><button id="liveRefresh" type="button" class="headerBtn">↻ Refresh</button></div>
+ <p id="liveHelp">Create a proposal. Copy the client link, then open it in another browser or on your phone. Changes will be saved on the server.</p>
+ <div class="liveLinks" id="liveLinks" hidden>
+  <label>CLIENT REVIEW LINK <input id="clientShareUrl" readonly aria-label="Client share link"></label>
+  <button id="copyClientShare" type="button" class="primary">Copy client link ↗</button>
+  <label id="studioLinkWrap">STUDIO EDIT LINK <input id="studioShareUrl" readonly aria-label="Studio private link"></label>
+  <button id="copyStudioShare" type="button" class="secondary">Copy studio link</button>
+ </div>
+</section>
+<section class="view active" id="studioView" aria-label="商家工作台">
+  <div class="studioHero"><div class="eyebrow">STUDIO WORKSPACE / SHARED NEGOTIATION</div><h1>SEE THE CHANGE.<br><span>DECIDE TOGETHER.</span></h1><p data-i="studioIntro">客户希望新增工作时，先确认价格和交期，再把清晰的方案发给客户。内部估算只留在工作室这一侧。</p></div>
+  <div class="stage">
+    <div class="editorPane">
+      <div class="sectionHead"><h2 data-i="original">01 / 原合同（不变）</h2><span class="pill" data-i="baselineCaption">保留既有承诺</span></div>
+      <div class="box">
+        <div class="baseline"><div><div class="tiny" data-i="standard">标准项目价格</div><div class="value" id="basePrice">$4,000</div></div><div class="meta" id="baseMeta">40 工时 · 10 工作日<br>主页 / 关于页 / 联系页</div><button type="button" class="textBtn" id="editBaseline" data-i="edit">编辑 ↗</button></div>
+        <div class="smallInputGrid" id="baselineInputs" hidden>
+          <div class="f"><label data-i="baseFee">原项目价格 ($)</label><input id="baseFeeInput" type="number" min="100" step="100" value="4000"></div>
+          <div class="f"><label data-i="baseHours">原项目工时</label><input id="baseHoursInput" type="number" min="1" step="1" value="40"></div>
+          <div class="f"><label data-i="baseDays">原项目工作日</label><input id="baseDaysInput" type="number" min="1" step="1" value="10"></div>
+        </div>
+      </div>
+      <div class="sectionHead"><h2 data-i="newRequest">02 / 客户新增要求</h2><span class="pill" data-i="studioEstimate">由工作室估算</span></div>
+      <div class="box request"><h3 data-i="requestCaption">CLIENT REQUEST</h3><input class="titleInput" id="requestTitle" value="新增活动推广页面" aria-label="客户新增要求"><textarea id="requestDescription" aria-label="新增要求说明">在原定主页、关于页和联系页之外，新增一张活动推广页面，包含报名区块及适配手机的视觉排版。</textarea><p class="hint" data-i="requestHint">只展示需要新增的工作；原合同已约定的交付内容保持不变。</p></div>
+      <div class="sectionHead"><h2 data-i="terms">03 / 工作室内部 · 调整条件</h2><span class="pill">HOURS / FEE / DAYS</span></div>
+      <div class="box mixer">
+        <div class="mixerHeader"><h2 data-i="control">INTERACTIVE TERMS</h2><span class="pill" data-i="internalOnly">内部参考数据可见</span></div>
+        <div class="sliderCard"><div class="sliderTitle"><label for="workSlider" data-i="work">新增工作</label><div class="sliderValue" id="workDisplay">+8h <small>总工作量 48h</small></div></div><p class="sliderDesc" data-i="workDescription">估算这次客户新增的工作量。</p><input id="workSlider" class="range" type="range" min="0" max="24" step="1" value="8"><div class="limits"><span>0h</span><span>24h</span></div><p class="reference" id="workHint">内部参考：按原项目平均费率约 $100/h。</p></div>
+        <div class="sliderCard"><div class="sliderTitle"><label for="feeSlider" data-i="fee">本次加价</label><div class="sliderValue" id="feeDisplay">+$800 <small>项目总价 $4,800</small></div></div><p class="sliderDesc" data-i="feeDescription">客户最终看到本次变化金额，以及完整项目总价。</p><input id="feeSlider" class="range" type="range" min="4000" max="7200" step="50" value="4800"><div class="limits"><span id="minFee">$4,000</span><span id="maxFee">$7,200</span></div><p class="reference"><span id="feeRecommend">参考加价 +$800（总价 $4,800）</span><button id="resetFee" class="inlineButton" type="button" hidden data-i="restore">采用建议 ↗</button></p></div>
+        <div class="sliderCard"><div class="sliderTitle"><label for="daySlider" data-i="deadline">本次延期</label><div class="sliderValue" id="dayDisplay">+2 天 <small>总共 12 个工作日</small></div></div><p class="sliderDesc" data-i="deadlineDescription">延长交期不能自动抵消劳动成本，报价和交期分别评估。</p><input id="daySlider" class="range" type="range" min="10" max="30" step="1" value="12"><div class="limits"><span id="minDays">10d</span><span id="maxDays">30d</span></div><p class="reference"><span id="dayRecommend">按当前产能估算，最早总工期 12 天</span><button id="resetDays" class="inlineButton" type="button" hidden data-i="restore">采用建议 ↗</button></p></div>
+      </div>
+    </div>
+    <aside class="summaryPane">
+      <div class="sectionHead"><h2 data-i="proposalSummary">04 / 方案概览</h2><span class="stateBadge" id="statusPill">未发布草稿</span></div>
+      <div class="resultBillboard"><span class="eyebrow" data-i="proposedTotal">PROPOSED PROJECT TOTAL</span><div class="bigMoney" id="heroTotal">$4,800</div><div class="explain" id="heroExplanation">原项目 $4,000 + 本次加价 $800</div></div>
+      <div class="detailsGrid"><div class="miniStat"><h3 data-i="newTimeline">调整后工作日</h3><strong id="heroDays">12d</strong><p id="heroDaysText">原定 10d · 延长 2d</p></div><div class="miniStat"><h3 data-i="addedWork">新增工作量</h3><strong id="heroWork">+8h</strong><p id="heroWorkText">原工作内容不变</p></div></div>
+      <div class="health" id="priceHealth"><div class="icon" id="priceIcon">✓</div><div><strong id="priceTitle">报价涵盖参考估值</strong><p id="priceMsg">按照原项目工时估算，当前报价合理。</p></div></div>
+      <div class="health" id="timeHealth"><div class="icon" id="timeIcon">✓</div><div><strong id="timeTitle">交期符合当前产能模型</strong><p id="timeMsg">预计最早 12 个工作日；实际交期需人工确认。</p></div></div>
+      <div class="sendbox"><div class="tiny" data-i="publishing">READY TO SHARE</div><h3 id="publishHeading" data-i="shareHead">准备发给客户？</h3><p id="publishDescription" data-i="shareDesc">点击发布，锁定这份提案版本，再体验客户收到的审阅页面。</p><div class="btnRow"><button type="button" class="primary" id="publishBtn" data-i="publish">生成客户审阅页 ↗</button><button type="button" class="secondary" id="studioOpenClient" data-i="openClient" hidden>打开客户页 →</button></div>
+      <div id="invite" class="invitation" hidden><div class="title" id="inviteTitle">NORTH STUDIO · 项目变更提案</div><div class="copy" id="inviteText">我们为您准备了一份项目调整方案，请审阅新的价格和交期。</div><span class="buttonFake" data-i="mockLink">Review changes ↗</span><p style="font-size:10px;color:#8f7e88;margin-top:12px" data-i="noLiveLink">真实客户链接显示在页面顶部，复制后可用另一台设备打开。</p></div></div>
+      <div class="studioCounter" hidden id="studioCounter">
+ <span class="eyebrow" data-i="counterFromClient">CLIENT COUNTERPROPOSAL / 客户提出的新方案</span>
+ <strong id="studioCounterTitle">$4,500 · 12d · +5h</strong><p id="studioCounterBody">客户的协商草稿将出现在这里。</p>
+ <div class="btnRow"><button type="button" class="primary" id="studioLoadCounter" data-i="loadCounter">把客户方案载入 Studio 草稿 ↗</button><button type="button" class="secondary" id="studioIgnoreCounter" data-i="ignoreCounter">保留当前工作室方案</button></div>
+</div>
+<div class="activity"><div class="sectionHead"><h2 data-i="activity">05 / 提案状态与客户反馈</h2><span class="pill" id="proposalVersion">CH–001 / v0</span></div><div id="activityContent"><p class="hint" data-i="emptyActivity">发布提案后，客户的操作会回到这里。你可以再修改并发布新版本。</p></div></div>
+    </aside>
+  </div>
+  <footer class="previewNote" data-i="studioFooter">● V0.9：两端通过服务器共享版本与回应；当前仍是演示确认，不属于正式电子签署。</footer>
+</section>
+
+<section class="view" id="clientView" aria-label="客户审阅界面">
+  <div class="clientHeader"><div class="northLogo"><div class="northShape">N</div><div><div class="northName">NORTH STUDIO</div><div class="northSub">DESIGN & DIGITAL EXPERIENCE</div></div></div><div class="clientStatus" id="clientStateBadge">Review requested</div></div>
+  <main class="clientMain">
+    <div class="cEyebrow" data-i="clientEyebrow">PROJECT CHANGE PROPOSAL / CH–001</div>
+    <h1 data-i="clientHeading">请审阅您的项目调整方案。</h1>
+    <p class="clientLead" data-i="clientIntro">您好，我们根据您提出的新需求整理了更新后的费用与交付时间。原合同已约定的交付内容不会被自动取消。</p>
+    <div class="projectMeta"><span data-i="clientProject">项目 · Brand Website</span><span id="clientVersion">变更方案 v1</span><span data-i="clientNoSign">仅供审阅 · 未签署</span></div>
+    
+<div class="clientShared" id="clientShared">
+ <div class="cSharedEyebrow">02 / SHARED NEGOTIATION · EXPLORE TOGETHER</div>
+ <div class="cSharedHeading"><div><h2 data-i="sharedHeading">让我们一起调整方案。</h2><p data-i="sharedDesc">您也可以拖动价格、交期与新增工作量。这里是在探索选择，并不是直接修改合同。</p></div><span class="cSharedChip" data-i="clientSandbox">YOUR PRIVATE DRAFT</span></div>
+ <div class="cBaselineRow"><span><span data-i="originalFixed">原合同不变：</span> <b id="sharedBaseFee">$4,000</b></span><span><span data-i="originalTime">原交期：</span> <b id="sharedBaseDays">10d</b></span><span><span data-i="originKeep">原有交付全部保留 ✓</span></span></div>
+ <div class="cMixerGrid">
+  <div class="cControls">
+   <div class="cControl"><div class="cControlTop"><label for="clientWorkSlider" data-i="clientWork">希望新增多少工作</label><div class="cControlBig" id="clientWorkDisplay">+8h<small>共 48h</small></div></div><p class="cControlInfo" data-i="clientWorkExpl">降低这个数值意味着缩小新需求，原来的交付内容不会删减；具体删什么仍需双方确定。</p><input type="range" class="cRange" id="clientWorkSlider" min="0" max="24" step="1" value="8"><div class="cBounds"><span>0h</span><span>24h</span></div></div>
+   <div class="cControl"><div class="cControlTop"><label for="clientPriceSlider" data-i="clientPrice">我希望的本次加价</label><div class="cControlBig" id="clientFeeDisplay">+$800<small>项目总价 $4,800</small></div></div><p class="cControlInfo" data-i="clientPriceExpl">调低报价只是在表达预算偏好，不会自动减少实际工时。</p><input type="range" class="cRange" id="clientPriceSlider" min="4000" max="7200" step="50" value="4800"><div class="cBounds"><span id="clientPriceMin">$4,000</span><span id="clientPriceMax">$7,200</span></div></div>
+   <div class="cControl"><div class="cControlTop"><label for="clientDaySlider" data-i="clientDay">我希望的本次延期</label><div class="cControlBig" id="clientDayDisplay">+2d<small>总计 12 工作日</small></div></div><p class="cControlInfo" data-i="clientDayExpl">把交期提前不会让劳动成本消失。较短交期需设计师确认实际产能。</p><input type="range" class="cRange" id="clientDaySlider" min="10" max="32" step="1" value="12"><div class="cBounds"><span id="clientDayMin">10d</span><span id="clientDayMax">32d</span></div></div>
+  </div>
+  <div>
+   <div class="cResult"><span class="cSharedEyebrow" data-i="clientLiveTotal">YOUR EXPLORED OPTION / TOTAL PRICE</span><strong class="heroMoney" id="clientLiveTotal">$4,800</strong><div class="sub" id="clientLiveBreakdown">原合同 $4,000 · 此次 +$800</div><div class="cProof"><div class="cProofItem"><span data-i="clientTotalDeadline">最终工期</span><strong id="clientLiveDays">12d</strong></div><div class="cProofItem"><span data-i="clientAddedWork">本次新增</span><strong id="clientLiveWork">+8h</strong></div></div><div class="cNotice good" id="clientPriceNotice"><p>按当前工时假设，报价与预估交期吻合。</p></div><div class="cNotice good" id="clientDayNotice"><p>交期符合参考产能。</p></div></div>
+   <div class="cAdjustBtns"><button type="button" id="clientFitBudget" data-i="fitBudget">↘ 让新增内容匹配预算</button><button type="button" id="clientFitTime" data-i="fitTime">↘ 让新增内容匹配交期</button><button type="button" id="clientRestore" data-i="restoreStudio">↺ 恢复工作室原方案</button></div>
+   <div class="cExplain" id="clientDraftExplain"><b>一个重要区别：</b> 调整滑块是提供协商建议，不代表工作室承诺按此价格和日期交付。</div>
+  </div>
+ </div>
+</div>
+
+<div class="clientCard">
+      <section class="clientBlock"><span class="cSmall" data-i="whatChange">WHAT'S CHANGING</span><h2 id="clientRequestTitle">新增活动推广页面</h2><p id="clientRequestDesc">在原定三个页面之外增加推广页面。</p><div class="deliverables"><span data-i="keptHome">✓ 原主页保留</span><span data-i="keptAbout">✓ 原关于页保留</span><span data-i="keptContact">✓ 原联系页保留</span></div></section>
+      <section class="clientBlock"><span class="cSmall" data-i="clearPricing">PRICING · CLEAR & ITEMIZED</span><div class="cRows"><div class="cRow"><span data-i="originalPrice">原项目价格</span><strong id="clientBaseFee">$4,000</strong></div><div class="cRow"><span data-i="addedPrice">本次新增费用</span><strong class="clientAccent" id="clientFeeDelta">+$800</strong></div><div class="cRow emphasis"><span data-i="revisedTotal">调整后的总价</span><strong id="clientTotal">$4,800</strong></div></div></section>
+      <section class="clientBlock"><span class="cSmall" data-i="scheduleChanges">SCHEDULE · WHAT TO EXPECT</span><div class="cRows"><div class="cRow"><span data-i="originalDelivery">原定工期</span><strong id="clientBaseDays">10 个工作日</strong></div><div class="cRow"><span data-i="delay">本次延长</span><strong class="clientAccent" id="clientDelay">+2 个工作日</strong></div><div class="cRow emphasis"><span data-i="newDelivery">调整后工期</span><strong id="clientTotalDays" style="font-size:27px">12 个工作日</strong></div></div><p data-i="dateFootnote">这里展示的是项目开始后的累计工作日，实际日历交付日期仍需双方确认。</p></section>
+    </div>
+    
+<div class="sharedDecision" id="clientActionCard">
+  <div class="cNewLabel">03 / YOUR DECISION</div><h2 data-i="clientDecisionTitle">您希望如何处理这次变更？</h2>
+  <p data-i="sharedDecisionDesc">喜欢原方案就直接接受；想尝试不同费用或交期，就拖动上面的控制条，把您的想法发给工作室。</p>
+  <div class="sharedActionGrid"><button class="cPrimary" type="button" id="clientSendCounter" data-i="sendOption">发送我的协商方案 ↗</button><button class="cOutline" type="button" id="clientAccept" data-i="acceptOriginal">接受工作室原方案</button></div>
+  <label class="clientCommentLabel" data-i="commentLabel" for="clientMessage">备注 · 告诉工作室您最在意什么（可选）</label>
+  <textarea id="clientMessage" data-placeholder-key="commentPlaceholder" placeholder="比如：预算最多 $4,500，活动页面可以简化。"></textarea>
+  <button class="cLink" id="clientKeep" type="button" data-i="clientKeep">暂不增加，保留原合同</button>
+  <p class="cHonesty" data-i="clientNotice">○ 您的拖动不会直接更改已签合同。您发送的是待工作室回应的偏好。</p>
+</div>
+<div id="clientConfirmation" class="cConfirmation" hidden><div class="cEyebrow" id="confirmationType">RESPONSE RECORDED</div><h3 id="confirmationTitle">您的决定已记录</h3><p id="confirmationBody">请返回工作室视图查看。</p><button type="button" class="cPrimary" id="backToStudio" data-i="backToStudio">查看工作室收到的反馈 ↗</button></div>
+    <div class="clientFooter" data-i="clientFooter">此为可操作的本地演示。尚未发送真实邮件、验证审批人身份、修改合同或取得电子签名。客户看到的内容来自最近一次发布的提案快照。</div>
+  </main>
+</section>
+</div>
+<script>
+(()=>{'use strict';
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const money=n=>'$'+Math.round(n).toLocaleString('en-US');
+const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
+const F={base:$('#baseFeeInput'),hours:$('#baseHoursInput'),days:$('#baseDaysInput'),title:$('#requestTitle'),description:$('#requestDescription'),work:$('#workSlider'),price:$('#feeSlider'),delivery:$('#daySlider')};
+const L={zh:{reset:'重置',studioIntro:'设计师先发布工作室方案，然后和客户使用同一个模型探索价格、交期和新增工作内容。内部成本只留在工作室这一侧。',original:'01 / 原合同（不变）',baselineCaption:'保留既有承诺',standard:'标准项目价格',edit:'编辑 ↗',hide:'收起 ↗',baseFee:'原项目价格 ($)',baseHours:'原项目工时',baseDays:'原项目工作日',newRequest:'02 / 客户新增要求',studioEstimate:'由工作室估算',requestCaption:'CLIENT REQUEST',requestHint:'只展示需要新增的工作；原合同已约定的交付内容保持不变。',terms:'03 / 工作室内部 · 调整条件',control:'INTERACTIVE TERMS',internalOnly:'内部参考数据可见',work:'新增工作',workDescription:'估算这次客户新增的工作量。',fee:'本次加价',feeDescription:'客户最终看到本次变化金额，以及完整项目总价。',deadline:'本次延期',deadlineDescription:'延长交期不能自动抵消劳动成本，报价和交期分别评估。',restore:'采用建议 ↗',proposalSummary:'04 / 方案概览',proposedTotal:'PROPOSED PROJECT TOTAL',newTimeline:'调整后工作日',addedWork:'新增工作量',publishing:'READY TO SHARE',shareHead:'准备发给客户？',shareDesc:'点击发布，锁定这份提案版本，再体验客户收到的审阅页面。',publish:'生成客户审阅页 ↗',resend:'更新并重新发布 ↗',openClient:'打开客户页 →',mockLink:'Review changes ↗',noLiveLink:'真实客户链接显示在页面顶部，复制后可用另一台设备打开。',activity:'05 / 提案状态与客户反馈',emptyActivity:'发布提案后，客户的操作会回到这里。你可以再修改并发布新版本。',studioFooter:'● V0.9：两端通过服务器共享版本与回应；当前仍是演示确认，不属于正式电子签署。',clientEyebrow:'PROJECT CHANGE PROPOSAL / CH–001',clientHeading:'请审阅您的项目调整方案。',clientIntro:'您好，我们根据您提出的新需求整理了更新后的费用与交付时间。原合同已约定的交付内容不会被自动取消。',clientProject:'项目 · Brand Website',clientNoSign:'仅供审阅 · 未签署',whatChange:"WHAT'S CHANGING",keptHome:'✓ 原主页保留',keptAbout:'✓ 原关于页保留',keptContact:'✓ 原联系页保留',clearPricing:'PRICING · CLEAR & ITEMIZED',originalPrice:'原项目价格',addedPrice:'本次新增费用',revisedTotal:'调整后的总价',scheduleChanges:'SCHEDULE · WHAT TO EXPECT',originalDelivery:'原定工期',delay:'本次延长',newDelivery:'调整后工期',dateFootnote:'这里展示的是项目开始后的累计工作日，实际日历交付日期仍需双方确认。',clientDecisionTitle:'您希望如何处理这次变更？',clientDecisionDesc:'您可以同意、提出调整建议，或暂时按原合同继续。这里不会要求您创建账户。',clientAccept:'同意此方案 ↗',clientDiscuss:'讨论调整',clientKeep:'暂不增加，保留原合同',counterBudget:'您希望讨论的项目总预算（$）',counterMessage:'给工作室留言',sendCounter:'发送讨论建议 →',cancelCounter:'取消',backToStudio:'查看工作室收到的反馈 ↗',clientFooter:'此为可操作的本地演示。尚未发送真实邮件、验证审批人身份、修改合同或取得电子签名。客户看到的内容来自最近一次发布的提案快照。',baselineMeta:(h,d)=>`${h} 工时 · ${d} 工作日`,workVal:(w,h)=>`+${w}h <small>总工作量 ${h+w}h</small>`,feeVal:(add,total)=>`+${money(add)} <small>项目总价 ${money(total)}</small>`,dayVal:(add,total)=>`+${add} 天 <small>总共 ${total} 个工作日</small>`,hourly:r=>`内部参考：按原项目平均费率约 ${money(r)}/h。`,referenceFee:(add,total)=>`参考加价 +${money(add)}（总价 ${money(total)}）`,referenceDays:(d,total)=>`按当前产能估算，最早总工期 ${total} 天（延期 ${d} 天）`,heroExp:(b,a)=>`原项目 ${money(b)} + 本次加价 ${money(a)}`,heroDays:(base,add)=>`原定 ${base}d · 延长 ${add}d`,workScope:'原工作内容不变',feeOkTitle:'报价覆盖按工时推算的参考估值',feeOkMsg:'这是内部估算，不代表正式市场定价。',feeWarnTitle:'当前报价低于参考估值',feeWarnMsg:gap=>`比参考估值低 ${money(gap)}；需要明确是折扣还是工作室自行承担。`,timeOkTitle:'交期符合当前产能估算',timeOkMsg:day=>`预计最早 ${day} 个工作日；实际工期需双方确认。`,timeWarnTitle:'计划工期比模型估计更短',timeWarnMsg:day=>`按当前假设最早 ${day} 个工作日；需要确认额外产能或重新排期。`,draft:'未发布草稿',pending:'等待客户回复',accepted:'客户已同意（模拟）',revision:'客户要求调整',declined:'保持原合同',dirty:'有未发布的修改',inviteTitle:'NORTH STUDIO · 项目变更提案',inviteText:'我们为您准备了一份项目调整方案，请审阅新的价格和交期。',version:v=>`变更方案 v${v}`,clientDays:n=>`${n} 个工作日`,clientExtra:n=>`+${n} 个工作日`,receivedAccepted:'客户已同意这份提案（仅演示确认）',receivedRevision:(price,msg)=>`客户希望讨论项目总价 ${money(price)}。留言：${msg}`,receivedDeclined:'客户选择暂不增加新工作，按原合同继续。',published:(v)=>`第 ${v} 版提案已发布到演示客户端`,notPublished:'尚未发布。请先回到 Studio 生成客户审阅页。',confirmAccept:'已记录您对这份方案的同意',confirmAcceptBody:'工作室视图会看到您的反馈。真实业务中仍需正式核验身份与协议。',confirmRev:'已将您的调整建议发回工作室',confirmRevBody:'工作室可以依据您的建议制作下一版方案。',confirmDecline:'本次新增要求暂不推进',confirmDeclineBody:'原项目内容、费用与交期保持不变。',requiredNote:'请填写讨论原因或建议。',cancelled:'已经取消讨论。',demoNote:'● 交互概念验证 · 同一浏览器模拟双端流程；没有真实发送或电子签署。'},en:{reset:'Reset',studioIntro:'Prepare a studio proposal, then invite the client into a shared model of work, price and time. Private cost assumptions stay in Studio.',original:'01 / ORIGINAL AGREEMENT',baselineCaption:'Existing deliverables protected',standard:'Standard project price',edit:'Edit ↗',hide:'Close ↗',baseFee:'Original fee ($)',baseHours:'Original hours',baseDays:'Original workdays',newRequest:'02 / NEW CLIENT REQUEST',studioEstimate:'Studio estimate',requestCaption:'CLIENT REQUEST',requestHint:'Only describe the new work. Previously agreed deliverables remain unchanged.',terms:'03 / INTERNAL STUDIO NEGOTIATION',control:'INTERACTIVE TERMS',internalOnly:'Internal estimates',work:'Additional work',workDescription:'Estimate the hours needed for the new request.',fee:'Price increase',feeDescription:'The client will see the increase and revised total, not your internal rate.',deadline:'Schedule extension',deadlineDescription:'Extra time does not make the work free. Fee and capacity are evaluated separately.',restore:'Use estimate ↗',proposalSummary:'04 / CHANGE SUMMARY',proposedTotal:'PROPOSED PROJECT TOTAL',newTimeline:'Revised timeline',addedWork:'Added work',publishing:'READY TO SHARE',shareHead:'Ready for client review?',shareDesc:'Publish a fixed proposal version, then preview what the client would see.',publish:'Create client preview ↗',resend:'Publish revised version ↗',openClient:'Open client preview →',mockLink:'Review changes ↗',noLiveLink:'Illustrative email and link. No live shareable URL is created.',activity:'05 / STATUS & CLIENT RESPONSES',emptyActivity:'After publishing, simulated client responses appear here. Revise and publish another version as needed.',studioFooter:'● STUDIO PROTOTYPE: Internal time and cost estimates are private. No real login, sending, signatures or cross-device backend yet.',clientEyebrow:'PROJECT CHANGE PROPOSAL / CH–001',clientHeading:'Please review your project update.',clientIntro:'Hello! We have prepared an update based on your new request. Here is the revised fee and timeline. The original deliverables stay in place.',clientProject:'Project · Brand Website',clientNoSign:'For review · Not signed',whatChange:"WHAT'S CHANGING",keptHome:'✓ Home page stays',keptAbout:'✓ About page stays',keptContact:'✓ Contact page stays',clearPricing:'PRICING · CLEAR & ITEMIZED',originalPrice:'Original project',addedPrice:'This change',revisedTotal:'Updated project total',scheduleChanges:'SCHEDULE · WHAT TO EXPECT',originalDelivery:'Original timeline',delay:'Extension',newDelivery:'Updated timeline',dateFootnote:'Workdays are counted from project start. An actual calendar delivery date must be agreed separately.',clientDecisionTitle:'How would you like to proceed?',clientDecisionDesc:'You can accept the proposal, request a change or keep the original plan. No account needed to preview.',clientAccept:'Accept proposal ↗',clientDiscuss:'Discuss changes',clientKeep:'Keep original agreement',counterBudget:'Project total you would like to discuss ($)',counterMessage:'Note to the studio',sendCounter:'Send revision request →',cancelCounter:'Cancel',backToStudio:'See studio response ↗',clientFooter:'Interactive local demo only. No email was sent, approver identity verified, real contract amended or signature collected. Client content comes from the last published snapshot.',baselineMeta:(h,d)=>`${h}h · ${d} workdays`,workVal:(w,h)=>`+${w}h <small>${h+w}h total effort</small>`,feeVal:(add,total)=>`+${money(add)} <small>${money(total)} project total</small>`,dayVal:(add,total)=>`+${add}d <small>${total}d total timeline</small>`,hourly:r=>`Internal guide: original average rate ${money(r)}/h.`,referenceFee:(add,total)=>`Reference increase +${money(add)} (total ${money(total)})`,referenceDays:(d,total)=>`Modeled earliest: ${total} workdays (+${d})`,heroExp:(b,a)=>`Original ${money(b)} + added ${money(a)}`,heroDays:(base,add)=>`Original ${base}d · extension ${add}d`,workScope:'Original deliverables remain',feeOkTitle:'Quote meets the reference estimate',feeOkMsg:'This is a model assumption, not a market-pricing determination.',feeWarnTitle:'Quote is below the reference estimate',feeWarnMsg:gap=>`${money(gap)} below modeled value; this requires a clear discount or absorbed effort.`,timeOkTitle:'Timeline fits current modeled capacity',timeOkMsg:day=>`Modeled minimum ${day} workdays; actual dates require agreement.`,timeWarnTitle:'Delivery is earlier than the model',timeWarnMsg:day=>`The model needs ${day} workdays; confirm resources or replan.`,draft:'Unpublished draft',pending:'Awaiting client reply',accepted:'Accepted (demo)',revision:'Revision requested',declined:'Keep original',dirty:'Unpublished edits',inviteTitle:'NORTH STUDIO · Project change proposal',inviteText:'We prepared an update to your project. Please review the new cost and schedule.',version:v=>`Proposal v${v}`,clientDays:n=>`${n} workdays`,clientExtra:n=>`+${n} workdays`,receivedAccepted:'Client accepted this proposal (simulation only)',receivedRevision:(price,msg)=>`Client wants to discuss a total of ${money(price)}. Message: ${msg}`,receivedDeclined:'Client chose to keep the original agreement.',published:v=>`Published proposal v${v} to the demo client view`,notPublished:'Not published. Go to Studio and create a client review.',confirmAccept:'Your response has been recorded',confirmAcceptBody:'The Studio view will show your response. Real approval requires identity and agreement verification.',confirmRev:'Your revision request has been sent to Studio',confirmRevBody:'The studio can prepare another version based on your comments.',confirmDecline:'The new request is on hold',confirmDeclineBody:'The original project terms remain in place.',requiredNote:'Please add a reason or suggestion.',cancelled:'Discussion cancelled.',demoNote:'● Interactive concept · Two roles simulated in one browser; no real sending or e-signature.'}};
+
+Object.assign(L.zh,{
+ sharedHeading:'让我们一起调整方案。',sharedDesc:'您也可以拖动价格、交期与新增工作量。这里是在探索选择，并不是直接修改合同。',clientSandbox:'可互动 · 尚未提交',originalFixed:'原合同：',originalTime:'原交期：',originKeep:'原有交付全部保留 ✓',clientWork:'本次希望新增的工作',clientWorkExpl:'调小它代表缩小新需求，并不是取消原合同中的工作。具体减少哪些新增功能，需要双方确认。',clientPrice:'本次加价',clientPriceExpl:'降低价格是在表达预算偏好，不会自动减少已要求的工作。',clientDay:'本次延期',clientDayExpl:'把交期提前不会让劳动成本消失。实际产能仍需工作室确认。',clientLiveTotal:'探索方案 · 项目总价',clientTotalDeadline:'总工期',clientAddedWork:'新增工作',fitBudget:'↘ 按预算调整新增内容',fitTime:'↘ 按交期调整新增内容',restoreStudio:'↺ 恢复工作室提案',sharedDecisionDesc:'如果原方案合适可以直接同意。想要其他组合，就在上方拖动，并把自己的偏好发回工作室。',sendOption:'发送我的协商方案 ↗',acceptOriginal:'同意工作室原方案',commentLabel:'给工作室留言（可选）',clientNotice:'○ 任何拖动都不会直接修改原合同；发送后仍需工作室确认。',counterFromClient:'CLIENT COUNTERPROPOSAL / 客户协商方案',loadCounter:'载入客户方案为草稿 ↗',ignoreCounter:'暂不采用，继续讨论',clientReview:'02 / 一起探索方案',clientCounterHelp:'客户参与变更方案讨论，不代表商家已经批准新价格或产能。',clientDraftNote:'拖动后只是客户偏好，需重新确认新功能的具体交付范围。',clientFooter:'互动原型：同一浏览器模拟两种角色，未发送真实链接或邮件；没有跨设备后端、签署或身份核验。'});
+Object.assign(L.en,{
+ sharedHeading:'Explore the change together.',sharedDesc:'You can adjust the new work, price and timeline. This is an exploration—not an immediate contract change.',clientSandbox:'INTERACTIVE · UNSENT',originalFixed:'Original agreement:',originalTime:'Original timeline:',originKeep:'Original deliverables stay ✓',clientWork:'Requested additional work',clientWorkExpl:'Lowering this means reducing the NEW request, not removing anything already promised. Details require mutual agreement.',clientPrice:'Price increase',clientPriceExpl:'A lower price expresses your preference; it does not automatically reduce the work.',clientDay:'Schedule extension',clientDayExpl:'A shorter deadline does not make labor free. The studio must verify capacity.',clientLiveTotal:'EXPLORED OPTION / PROJECT TOTAL',clientTotalDeadline:'Total timeline',clientAddedWork:'New work',fitBudget:'↘ Adjust new request to budget',fitTime:'↘ Adjust new request to deadline',restoreStudio:'↺ Restore studio proposal',sharedDecisionDesc:'Accept the studio proposal, or explore another combination above and send your preferences back for review.',sendOption:'Send my preferred option ↗',acceptOriginal:'Accept studio proposal',commentLabel:'Note to the studio (optional)',clientNotice:'○ Sliding never changes the signed agreement; the studio must still approve any counterproposal.',counterFromClient:'CLIENT COUNTERPROPOSAL',loadCounter:'Load client option as studio draft ↗',ignoreCounter:'Keep discussing, no change',clientReview:'02 / EXPLORE OPTIONS TOGETHER',clientCounterHelp:'The client can negotiate visually; the studio has not yet agreed to a revised price or capacity.',clientDraftNote:'The client is proposing a preference; the exact scope of reduced new work needs agreement.',clientFooter:'Interactive local prototype simulating two roles in one browser. No real sharing, email, backend synchronization, signature or identity verification.'});
+
+let lang='zh',mode='studio',autoFee=true,autoDay=true,version=0,published=null,response=null,history=[],counterOpen=false,clientDraft=null,clientAutoFee=true,clientAutoDay=true,counterIgnored=false;
+let liveRole=null,liveToken=null,liveClientToken=null,liveLoading=false,liveSyncTimer=null;
+function liveNotice(msg){$('#liveStatus').textContent=msg;}
+function liveSetBusy(yes){liveLoading=yes;$('#publishBtn').disabled=yes;$('#clientAccept').disabled=yes;$('#clientKeep').disabled=yes;$('#clientSendCounter').disabled=yes;$('#liveRefresh').disabled=yes;}
+function liveHref(role,token){return location.origin+location.pathname+'?'+role+'='+encodeURIComponent(token);}
+function updateLiveUI(){
+ const active=!!liveToken;const client=liveRole==='client';
+ $('#liveShare').dataset.role=client?'client':'studio';
+ $('#liveLinks').hidden=!active||client;
+ $('#studioTab').hidden=active;$('#clientTab').hidden=active;
+ $('#studioOpenClient').hidden=true;
+ $('#resetBtn').hidden=active;$('#backToStudio').hidden=active&&client;
+ $('#liveHelp').textContent=client?'这是客户专属协商链接。您可调整新需求、价格与交期，再提交反提案；不会直接修改合同。':'把下方的客户链接发给另一人；双方数据保存在服务器。请妥善保管工作室编辑链接。';
+ if(!active)$('#liveHelp').textContent='工作室点击“发布方案”，即可生成真正可分享的客户网址。';
+ if(!client&&active){
+    $('#studioShareUrl').value=liveHref('studio',liveToken);
+    if(liveClientToken)$('#clientShareUrl').value=liveHref('client',liveClientToken);
+    else $('#clientShareUrl').value='Client link was only issued on creation in this browser';
+    $('#copyClientShare').disabled=!liveClientToken;
+ }
+}
+function applyLiveSnapshot(s,initial=false){
+ if(!s||!s.offer)return;
+ const newVersion=!published||s.version!==version;
+ published={...s.offer,version:s.version};published.fingerprint=currentFingerprint(published);
+ version=s.version;response=s.response||null;
+ if(s.history)history=s.history;
+ if(newVersion){
+   clientDraft={work:published.work,price:published.quote,days:published.finalDays};clientAutoFee=true;clientAutoDay=true;
+ }
+ if(initial&&liveRole==='studio'){
+   F.base.value=published.fee;F.hours.value=published.hours;F.days.value=published.days;F.work.value=published.work;F.title.value=published.title;F.description.value=published.description;
+   autoFee=false;autoDay=false;updateRanges();F.price.value=published.quote;F.delivery.value=published.finalDays;
+ }
+ renderStudio();renderClient();renderHistory();updateLiveUI();
+}
+async function liveAPI(path,options={}){
+ const res=await fetch(path,{...options,headers:{'Content-Type':'application/json',...(options.headers||{})},cache:'no-store'});
+ let data={};try{data=await res.json()}catch(e){}
+ if(!res.ok)throw new Error(typeof data.detail==='string'?data.detail:('Server error '+res.status));
+ return data;
+}
+async function syncLive(initial=false){
+ if(!liveToken||liveLoading)return;
+ try{const s=await liveAPI('/api/'+liveRole+'/'+encodeURIComponent(liveToken));applyLiveSnapshot(s,initial);if(initial)liveNotice(liveRole==='client'?'Client link connected · browser preview':'Studio linked · browser preview');}
+ catch(e){liveNotice('Cannot sync: '+e.message)}
+}
+async function copyText(v){try{await navigator.clipboard.writeText(v);liveNotice('Link copied ✓')}catch(e){window.prompt('Copy URL',v)}}
+async function bootstrapLive(){
+ const qs=new URLSearchParams(location.search), studio=qs.get('studio'), client=qs.get('client');
+ if(studio||client){
+   liveRole=studio?'studio':'client';liveToken=studio||client;
+   if(liveRole==='studio')liveClientToken=localStorage.getItem('scope-client-'+liveToken);
+   updateLiveUI();show(liveRole);await syncLive(true);
+ }else updateLiveUI();
+ if(liveSyncTimer)clearInterval(liveSyncTimer);
+ liveSyncTimer=setInterval(()=>{if(liveToken&&!document.hidden)syncLive(false)},5000);
+}
+
+const val=(el,min)=>Math.max(min,Number(el.value)||min);const tr=()=>L[lang];
+function base(){return {fee:val(F.base,100),hours:val(F.hours,1),days:val(F.days,1),work:val(F.work,0),title:F.title.value.trim()||'新需求',description:F.description.value.trim()}};
+function compute(){const x=base();const rate=x.fee/x.hours,capacity=x.hours/x.days;return {...x,rate,capacity,recommended:x.fee+x.work*rate,minDays:Math.ceil((x.hours+x.work)/capacity),quote:val(F.price,x.fee),finalDays:val(F.delivery,x.days)};}
+function setRange(input,min,max,step){input.min=min;input.max=max;input.step=step;input.value=clamp(Number(input.value)||min,min,max)}
+function updateRanges(){const x=base(),m=compute();setRange(F.price,x.fee,Math.max(x.fee+1500,Math.ceil((x.fee+24*x.fee/x.hours*1.35)/50)*50),50);setRange(F.delivery,x.days,Math.ceil(x.days+Math.max(20,24/(x.hours/x.days)+6)),1);if(autoFee)F.price.value=clamp(Math.round(m.recommended/50)*50,+F.price.min,+F.price.max);if(autoDay)F.delivery.value=clamp(m.minDays,+F.delivery.min,+F.delivery.max);}
+function fill(input){const min=+input.min,max=+input.max;input.style.setProperty('--fill',max===min?'0%':(100*(+input.value-min)/(max-min)).toFixed(2)+'%')}
+function setHTML(id,str){$(id).innerHTML=str}
+function setHealth(which,valid,title,message){const root=$('#'+which+'Health');root.className='health '+(valid?'good':'warn');$('#'+which+'Icon').textContent=valid?'✓':'!';$('#'+which+'Title').textContent=title;$('#'+which+'Msg').textContent=message;}
+function currentFingerprint(x){return JSON.stringify([x.fee,x.hours,x.days,x.work,x.title,x.description,x.quote,x.finalDays]);}
+function renderStudio(){const t=tr(),x=compute(),add=x.quote-x.fee,delay=x.finalDays-x.days;$('#basePrice').textContent=money(x.fee);$('#baseMeta').innerHTML=t.baselineMeta(x.hours,x.days)+'<br>Home / About / Contact';setHTML('#workDisplay',t.workVal(x.work,x.hours));setHTML('#feeDisplay',t.feeVal(add,x.quote));setHTML('#dayDisplay',t.dayVal(delay,x.finalDays));$('#workHint').textContent=t.hourly(x.rate);$('#feeRecommend').textContent=t.referenceFee(x.recommended-x.fee,x.recommended);$('#dayRecommend').textContent=t.referenceDays(x.minDays-x.days,x.minDays);$('#minFee').textContent=money(+F.price.min);$('#maxFee').textContent=money(+F.price.max);$('#minDays').textContent=F.delivery.min+'d';$('#maxDays').textContent=F.delivery.max+'d';[F.work,F.price,F.delivery].forEach(fill);$('#resetFee').hidden=autoFee||Math.abs(x.quote-x.recommended)<.01;$('#resetDays').hidden=autoDay||x.finalDays===x.minDays;$('#heroTotal').textContent=money(x.quote);$('#heroExplanation').textContent=t.heroExp(x.fee,add);$('#heroDays').textContent=x.finalDays+'d';$('#heroDaysText').textContent=t.heroDays(x.days,delay);$('#heroWork').textContent='+'+x.work+'h';$('#heroWorkText').textContent=t.workScope;setHealth('price',x.quote+1e-6>=x.recommended,x.quote>=x.recommended?t.feeOkTitle:t.feeWarnTitle,x.quote>=x.recommended?t.feeOkMsg:t.feeWarnMsg(x.recommended-x.quote));setHealth('time',x.finalDays>=x.minDays,x.finalDays>=x.minDays?t.timeOkTitle:t.timeWarnTitle,x.finalDays>=x.minDays?t.timeOkMsg(x.minDays):t.timeWarnMsg(x.minDays));let dirty=published&&currentFingerprint(x)!==published.fingerprint;$('#statusPill').textContent=!published?t.draft:dirty?t.dirty:response? t[response.type] : t.pending;$('#publishBtn').textContent=published?t.resend:t.publish;$('#studioOpenClient').hidden=!published;$('#invite').hidden=!published;$('#inviteTitle').textContent=t.inviteTitle;$('#inviteText').textContent=t.inviteText;$('#proposalVersion').textContent='CH–001 / v'+version;renderHistory();renderCounter();}
+function record(type,detail){history.unshift({type,detail,time:new Date().toLocaleTimeString(lang==='zh'?'zh-CN':'en-US',{hour:'2-digit',minute:'2-digit'})});renderHistory()}
+function renderHistory(){const t=tr();if(!history.length){$('#activityContent').innerHTML=`<p class="hint">${t.emptyActivity}</p>`;return;}const area=$('#activityContent');area.innerHTML='';for(const h of history){const row=document.createElement('div');row.className='activityRow';const dot=document.createElement('span');dot.className='dot';const info=document.createElement('div');const line=document.createElement('div');line.textContent=h.type==='published'?t.published(h.detail.version):h.type==='accepted'?t.receivedAccepted:h.type==='revision'?(lang==='zh'?`客户希望讨论：新增 ${h.detail.work}h · 总价 ${money(h.detail.price)} · ${h.detail.days} 工作日。${h.detail.message||''}`:`Client suggests: +${h.detail.work}h · ${money(h.detail.price)} total · ${h.detail.days} days. ${h.detail.message||''}`):t.receivedDeclined;const time=document.createElement('div');time.className='time';time.textContent=h.time;info.append(line,time);row.append(dot,info);area.append(row);}}
+async function publish(){
+ if(liveRole==='client'||liveLoading)return;
+ const x=compute(),offer={fee:x.fee,hours:x.hours,days:x.days,work:x.work,title:x.title,description:x.description,quote:x.quote,finalDays:x.finalDays};
+ liveSetBusy(true);liveNotice('Saving your proposal to the live server…');
+ try{
+   let s;
+   if(!liveToken){
+     const created=await liveAPI('/api/sessions',{method:'POST',body:JSON.stringify(offer)});
+     liveRole='studio';liveToken=created.studio_token;liveClientToken=created.client_token;
+     localStorage.setItem('scope-client-'+liveToken,liveClientToken);
+     window.history.replaceState({},'',location.pathname+'?studio='+encodeURIComponent(liveToken));
+     s=created.snapshot;
+   }else s=await liveAPI('/api/studio/'+encodeURIComponent(liveToken)+'/publish',{method:'POST',body:JSON.stringify(offer)});
+   counterOpen=false;counterIgnored=false;$('#clientMessage').value='';
+   applyLiveSnapshot(s);show('studio');liveNotice('Published version '+s.version+' · share the client link');
+ }catch(e){liveNotice('Publish failed: '+e.message);alert(e.message)}
+ finally{liveSetBusy(false)}
+}
+
+function clientReference(){
+ if(!published)return null;
+ const x=published;
+ const capacity=x.hours/x.days,rate=x.fee/x.hours;
+ const d=clientDraft||{work:x.work,price:x.quote,days:x.finalDays};
+ return {x,d,rate,capacity,recommended:x.fee+d.work*rate,earliest:Math.ceil((x.hours+d.work)/capacity)};
+}
+function clientUpdateFromWork(){
+ const m=clientReference();if(!m)return;
+ if(clientAutoFee)clientDraft.price=Math.round(m.recommended/50)*50;
+ if(clientAutoDay)clientDraft.days=m.earliest;
+}
+function clientScale(){
+ if(!published)return;
+ const x=published;
+ const maxPrice=Math.max(x.fee+1500,Math.ceil((x.fee+24*x.fee/x.hours*1.4)/50)*50);
+ const maxDays=Math.ceil(x.days+Math.max(20,24/(x.hours/x.days)+6));
+ const w=$('#clientWorkSlider'),f=$('#clientPriceSlider'),d=$('#clientDaySlider');
+ w.max=24;f.min=x.fee;f.max=maxPrice;d.min=x.days;d.max=maxDays;
+ $('#clientPriceMin').textContent=money(x.fee);$('#clientPriceMax').textContent=money(maxPrice);
+ $('#clientDayMin').textContent=x.days+'d';$('#clientDayMax').textContent=maxDays+'d';
+ clientDraft.work=clamp(clientDraft.work,0,24);
+ clientDraft.price=clamp(clientDraft.price,x.fee,maxPrice);
+ clientDraft.days=clamp(clientDraft.days,x.days,maxDays);
+}
+function renderCounter(){
+ const box=$('#studioCounter');
+ if(!response||response.type!=='revision'||counterIgnored) {box.hidden=true;return;}
+ const d=response.detail;
+ box.hidden=false;
+ $('#studioCounterTitle').textContent=`+${d.work}h · ${money(d.price)} · ${d.days}d`;
+ $('#studioCounterBody').textContent=(lang==='zh'?`客户协商草案：新增工作 +${d.work}h / 项目总价 ${money(d.price)} / 总交期 ${d.days} 个工作日。\n备注：${d.message||'无'}\n这是客户偏好，尚未获工作室批准。`:`Client draft: +${d.work}h / ${money(d.price)} project total / ${d.days} workdays.\nNote: ${d.message||'None'}\nThis is a client preference, not an approved amendment.`).replaceAll('\\n','\n');
+}
+function clientNotice(which,msg,isOkay){
+ const el=$('#'+which);el.className='cNotice '+(isOkay?'good':'');el.querySelector('p').textContent=msg;
+}
+function renderClient(){
+ const t=tr();
+ if(!published){$('#clientShared').hidden=true;$('#clientActionCard').hidden=true;$('#clientConfirmation').hidden=false;$('#confirmationTitle').textContent=t.notPublished;$('#confirmationBody').textContent='';$('#clientStateBadge').textContent=t.draft;return;}
+ const x=published;
+ if(!clientDraft){clientDraft={work:x.work,price:x.quote,days:x.finalDays};clientAutoFee=true;clientAutoDay=true;}
+ clientScale();const m=clientReference(),d=m.d;
+ $('#clientShared').hidden=false;
+ $('#clientActionCard').hidden=!!response;$('#clientConfirmation').hidden=!response;
+ $('#clientRequestTitle').textContent=x.title;$('#clientRequestDesc').textContent=x.description||' ';
+ $('#clientBaseFee').textContent=money(x.fee);$('#clientFeeDelta').textContent='+'+money(x.quote-x.fee);$('#clientTotal').textContent=money(x.quote);
+ $('#clientBaseDays').textContent=t.clientDays(x.days);$('#clientDelay').textContent=t.clientExtra(x.finalDays-x.days);$('#clientTotalDays').textContent=t.clientDays(x.finalDays);
+ $('#clientVersion').textContent=t.version(x.version);
+ $('#clientStateBadge').textContent=response?t[response.type]:t.pending;
+ $('#sharedBaseFee').textContent=money(x.fee);$('#sharedBaseDays').textContent=x.days+'d';
+ const sliders=[['#clientWorkSlider',d.work],['#clientPriceSlider',d.price],['#clientDaySlider',d.days]];
+ sliders.forEach(([sel,v])=>{const el=$(sel);el.value=v;el.disabled=!!response;fill(el)});
+ $('#clientWorkDisplay').innerHTML=`+${d.work}h <small>${lang==='zh'?'总共':'total'} ${x.hours+d.work}h</small>`;
+ $('#clientFeeDisplay').innerHTML=`+${money(d.price-x.fee)} <small>${lang==='zh'?'总价':'total'} ${money(d.price)}</small>`;
+ $('#clientDayDisplay').innerHTML=`+${d.days-x.days}d <small>${lang==='zh'?'总计':'total'} ${d.days}d</small>`;
+ $('#clientLiveTotal').textContent=money(d.price);
+ $('#clientLiveBreakdown').textContent=(lang==='zh'?`原合同 ${money(x.fee)} · 本次 ${money(d.price-x.fee)}`:`Original ${money(x.fee)} · Change +${money(d.price-x.fee)}`);
+ $('#clientLiveDays').textContent=d.days+'d';$('#clientLiveWork').textContent='+'+d.work+'h';
+ const feeOkay=d.price+1e-6>=m.recommended,dayOkay=d.days>=m.earliest;
+ clientNotice('clientPriceNotice',feeOkay?(lang==='zh'?`按工时计算的参考总价 ${money(m.recommended)}，当前报价可以覆盖参考估值。`:`Modeled reference total ${money(m.recommended)}; the draft price meets it.`):(lang==='zh'?`报价较工时参考估值少 ${money(m.recommended-d.price)}。缩减新需求、协商折扣或由工作室确认额外成本。`:`Draft price is ${money(m.recommended-d.price)} below reference. Reduce new work or seek studio approval for a discount.`),feeOkay);
+ clientNotice('clientDayNotice',dayOkay?(lang==='zh'?`按当前产能，预计最早 ${m.earliest} 个工作日，您的交期在估算范围内。`:`Capacity-based earliest is ${m.earliest} workdays; the draft is within the estimate.`):(lang==='zh'?`当前估计至少 ${m.earliest} 个工作日，比您希望的交期多 ${m.earliest-d.days} 天。需调整新需求或商家确认额外产能。`:`Capacity model needs ${m.earliest} days—${m.earliest-d.days} more than requested. Reduce new work or confirm extra resources.`),dayOkay);
+ const dirty= d.work!==x.work||d.price!==x.quote||d.days!==x.finalDays;
+ $('#clientRestore').disabled=!!response;$('#clientDraftExplain').textContent= dirty?(lang==='zh'?'这是您正在探索的另一种方案。滑块不直接修改报价；发送后工作室可以审阅，再决定是否发布新版本。减少新增工时需要重新确认具体的新增功能。':'This is your explored option. Moving controls cannot change a signed agreement. Send it for studio review; reducing new work requires agreed deliverables.'):(lang==='zh'?'当前与工作室发布的提案一致。您可以直接接受，或者拖动滑块探索其他可能。':'This matches the published studio proposal. Accept it, or move a slider to explore alternatives.');
+ $('#clientFitBudget').hidden=!!response||feeOkay||d.work===0;
+ $('#clientFitTime').hidden=!!response||dayOkay||d.work===0;
+ if(response){$('#confirmationType').textContent='RESPONSE RECORDED · BROWSER PREVIEW';$('#confirmationTitle').textContent=response.type==='accepted'?t.confirmAccept:response.type==='revision'?t.confirmRev:t.confirmDecline;$('#confirmationBody').textContent=response.type==='accepted'?t.confirmAcceptBody:response.type==='revision'?t.confirmRevBody:t.confirmDeclineBody;}
+}
+function applyClientCounter(){
+ if(!response||response.type!=='revision')return;
+ const d=response.detail;
+ F.work.value=clamp(d.work,0,+F.work.max);
+ autoFee=false;autoDay=false;
+ updateRanges();
+ F.price.value=clamp(d.price,+F.price.min,+F.price.max);
+ F.delivery.value=clamp(d.days,+F.delivery.min,+F.delivery.max);
+ renderStudio();show('studio');
+ $('#statusPill').textContent=lang==='zh'?'已载入客户建议 · 尚未发布':'Client option loaded · unpublished';
+}
+async function respond(type,detail={}){
+ if(!published||liveRole!=='client'||liveLoading)return;
+ liveSetBusy(true);liveNotice('Saving your response in this browser…');
+ try{
+   const s=await liveAPI('/api/client/'+encodeURIComponent(liveToken)+'/respond',{method:'POST',body:JSON.stringify({version:published.version,type,detail})});
+   response=s.response;counterOpen=false;renderClient();renderStudio();liveNotice('Saved in this browser preview ✓');
+ }catch(e){liveNotice('Response not saved: '+e.message);alert('Response not saved: '+e.message);await syncLive()}
+ finally{liveSetBusy(false)}
+}
+function show(next){if(liveToken&&liveRole&&next!==liveRole)next=liveRole;mode=next;$('#studioView').classList.toggle('active',mode==='studio');$('#clientView').classList.toggle('active',mode==='client');$('#studioTab').classList.toggle('active',mode==='studio');$('#clientTab').classList.toggle('active',mode==='client');if(mode==='client')renderClient();else renderStudio();window.scrollTo({top:0,behavior:'instant'});}
+function translate(){const t=tr();document.documentElement.lang=lang==='zh'?'zh-CN':'en';$$('[data-i]').forEach(el=>{const key=el.dataset.i;if(typeof t[key]==='string')el.textContent=t[key]});$('#editBaseline').textContent=$('#baselineInputs').hidden?t.edit:t.hide;$('#langBtn').textContent=lang==='zh'?'EN':'中文';$('#demoNote').textContent=lang==='zh'?'● SCOPE V0.9 / GITHUB PAGES PREVIEW · 仅同一浏览器共享 · 不等于正式签署':'● SCOPE V0.9 / GITHUB PAGES PREVIEW · Same-browser demo, not a legal signature';renderStudio();renderClient()}
+function reset(){F.base.value=4000;F.hours.value=40;F.days.value=10;F.work.value=8;F.title.value=lang==='zh'?'新增活动推广页面':'Add a campaign landing page';F.description.value=lang==='zh'?'在原定主页、关于页和联系页之外，新增一张活动推广页面，包含报名区块及适配手机的视觉排版。':'Add one promotional campaign page alongside Home, About and Contact, including a sign-up section and responsive layout.';autoFee=true;autoDay=true;version=0;published=null;response=null;history=[];counterOpen=false;counterIgnored=false;clientDraft=null;clientAutoFee=true;clientAutoDay=true;updateRanges();renderStudio();renderClient();show('studio')}
+F.work.addEventListener('input',()=>{updateRanges();renderStudio()});[F.base,F.hours,F.days].forEach(el=>el.addEventListener('input',()=>{updateRanges();renderStudio()}));[F.title,F.description].forEach(el=>el.addEventListener('input',renderStudio));F.price.addEventListener('input',()=>{autoFee=false;renderStudio()});F.delivery.addEventListener('input',()=>{autoDay=false;renderStudio()});$('#resetFee').addEventListener('click',()=>{autoFee=true;updateRanges();renderStudio()});$('#resetDays').addEventListener('click',()=>{autoDay=true;updateRanges();renderStudio()});$('#editBaseline').addEventListener('click',()=>{$('#baselineInputs').hidden=!$('#baselineInputs').hidden;translate()});$('#publishBtn').addEventListener('click',publish);$('#studioOpenClient').addEventListener('click',()=>{if(liveClientToken)window.open(liveHref('client',liveClientToken),'_blank','noopener');});$('#studioTab').addEventListener('click',()=>show('studio'));$('#clientTab').addEventListener('click',()=>show('client'));$('#clientAccept').addEventListener('click',()=>respond('accepted'));$('#clientKeep').addEventListener('click',()=>respond('declined'));
+$('#clientWorkSlider').addEventListener('input',e=>{if(!published||response)return;clientDraft.work=+e.target.value;clientUpdateFromWork();renderClient()});
+$('#clientPriceSlider').addEventListener('input',e=>{if(!published||response)return;clientAutoFee=false;clientDraft.price=+e.target.value;renderClient()});
+$('#clientDaySlider').addEventListener('input',e=>{if(!published||response)return;clientAutoDay=false;clientDraft.days=+e.target.value;renderClient()});
+$('#clientFitBudget').addEventListener('click',()=>{if(!published||response)return;const m=clientReference(),budgeted=Math.max(0,Math.floor((m.d.price-m.x.fee)/m.rate));clientDraft.work=Math.min(m.d.work,budgeted);clientAutoDay=true;clientUpdateFromWork();renderClient()});
+$('#clientFitTime').addEventListener('click',()=>{if(!published||response)return;const m=clientReference(),allowed=Math.max(0,Math.floor(m.d.days*m.capacity-m.x.hours));clientDraft.work=Math.min(m.d.work,allowed);clientAutoFee=true;clientUpdateFromWork();renderClient()});
+$('#clientRestore').addEventListener('click',()=>{if(!published||response)return;clientDraft={work:published.work,price:published.quote,days:published.finalDays};clientAutoFee=true;clientAutoDay=true;renderClient()});
+$('#clientSendCounter').addEventListener('click',()=>{if(!published||response)return;respond('revision',{work:clientDraft.work,price:clientDraft.price,days:clientDraft.days,message:$('#clientMessage').value.trim()})});
+$('#studioLoadCounter').addEventListener('click',applyClientCounter);
+$('#studioIgnoreCounter').addEventListener('click',()=>{counterIgnored=true;renderCounter()});
+$('#backToStudio').addEventListener('click',()=>show('studio'));$('#resetBtn').addEventListener('click',()=>{if(!liveToken)reset()});$('#langBtn').addEventListener('click',()=>{lang=lang==='zh'?'en':'zh';translate()});
+$('#liveRefresh').addEventListener('click',()=>syncLive(false));
+$('#copyClientShare').addEventListener('click',()=>{if(liveClientToken)copyText(liveHref('client',liveClientToken))});
+$('#copyStudioShare').addEventListener('click',()=>{if(liveToken)copyText(liveHref('studio',liveToken))});
+reset();translate();bootstrapLive();
+})();
+</script>
+</body>
+</html>
