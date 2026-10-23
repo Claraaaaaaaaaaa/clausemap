@@ -44,3 +44,5 @@ Then open `http://localhost:4173/clausemap/`. If the repository is an account-ro
 - `Self-confirmed`: the user declared review complete in this browser; no machine verification occurred.
 
 Source rules: [Build With AI: Basics official rules](https://learn-ai-basics.devpost.com/rules). The rules are captured as a small, static, source-linked catalog in `src/rules.ts`. License and other recommendation-only material are not automatic failure checks.
+
+`design/reference/fashion-noir-v1.1.html` is a preserved visual prototype with simulated interactions. It is not the production app; production findings come only from live GitHub requests.
