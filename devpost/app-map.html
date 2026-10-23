@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ClauseMap — App Map</title>
+  <style>
+    :root { color-scheme: dark; font: 16px/1.55 system-ui, sans-serif; background: #100b11; color: #fff3f8; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    main { width: min(900px, calc(100% - 36px)); margin: 0 auto; padding: 44px 0 70px; }
+    h1, h2 { line-height: 1.12; letter-spacing: -.04em; }
+    h1 { font-size: clamp(2.4rem, 6vw, 4.6rem); margin: .2em 0; }
+    h2 { margin: 2em 0 .55em; font-size: 1.55rem; }
+    p { max-width: 72ch; }
+    .eyebrow { color: #ff4da1; font-size: .76rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+    .lede { color: #d6adbf; font-size: 1.1rem; }
+    .panel { background: #1b1119; border: 1px solid #644154; border-radius: 14px; padding: 20px; }
+    .flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 22px 0; }
+    .step { position: relative; min-width: 0; background: #281925; border: 1px solid #644154; border-radius: 12px; padding: 16px; }
+    .step:not(:last-child)::after { content: '→'; position: absolute; right: -17px; top: 50%; z-index: 1; color: #ff4da1; font-size: 1.25rem; transform: translateY(-50%); }
+    .step strong { display: block; color: #ffc0df; }
+    .step span { display: block; margin-top: 8px; color: #d6adbf; font-size: .83rem; overflow-wrap: anywhere; }
+    ol { padding-left: 1.4rem; }
+    li { margin: 0 0 1.1rem; padding-left: .25rem; }
+    code { color: #ffc0df; overflow-wrap: anywhere; }
+    a { color: #ff8fc4; }
+    a:focus-visible { outline: 3px solid #ff4da1; outline-offset: 3px; }
+    .note { border-left: 3px solid #ff4da1; padding-left: 16px; color: #e5cad8; }
+    @media (max-width: 650px) { .flow { grid-template-columns: 1fr; } .step:not(:last-child)::after { right: 16px; top: auto; bottom: -22px; transform: rotate(90deg); } }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">ClauseMap / source guide</p>
+    <h1>Where the evidence comes from.</h1>
+    <p class="lede">ClauseMap checks one public GitHub repository at a pinned default-branch commit. It reports what the available evidence supports, then keeps human declarations separate. This map is a reference route through the finished proof of concept.</p>
+
+    <section aria-labelledby="flow-title">
+      <h2 id="flow-title">One real action</h2>
+      <div class="flow" role="list" aria-label="Run Preflight data flow">
+        <div class="step" role="listitem"><strong>Enter a repo URL</strong><span><code>src/App.tsx</code> → <code>parseRepositoryUrl</code></span></div>
+        <div class="step" role="listitem"><strong>Fetch a snapshot</strong><span><code>InspectionController.run</code> → <code>inspectGitHub</code></span></div>
+        <div class="step" role="listitem"><strong>Decide each status</strong><span><code>buildMachineReport</code> checks commit, tree, and files</span></div>
+        <div class="step" role="listitem"><strong>Inspect the evidence</strong><span><code>InspectionMap</code> → <code>EvidenceInspector</code></span></div>
+      </div>
+      <p class="note">GitHub REST API supplies the machine observations. The browser stores only manual confirmation flags, keyed by normalized repository identity; it does not restore an old machine report after refresh.</p>
+    </section>
+
+    <section aria-labelledby="route-title">
+      <h2 id="route-title">Three-stop reference route</h2>
+      <ol>
+        <li><strong>Start and re-check:</strong> find <code>start</code> and <code>submit</code> in <code>src/App.tsx</code>. Both route a parsed repository into a fresh controller run; the page shows a checking state until that run returns.</li>
+        <li><strong>Pin and classify:</strong> find <code>inspectGitHub</code> in <code>src/githubClient.ts</code>, then <code>buildMachineReport</code> in <code>src/inspectionEngine.ts</code>. The client fetches metadata, default-branch commit, and matching recursive tree. The report permits <code>Missing</code> only when a complete trusted tree lacks the regular file.</li>
+        <li><strong>Show the limit:</strong> find <code>EvidenceInspector</code> in <code>src/App.tsx</code> and <code>rules</code> in <code>src/rules.ts</code>. The inspector shows observation, pinned source, official-rule context, limitation, and next action. Manual nodes use <code>src/manualConfirmationStore.ts</code> and never become machine <code>Verified</code>.</li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="change-title">
+      <h2 id="change-title">To change this, start here</h2>
+      <div class="panel">
+        <p><strong>Official wording or source link:</strong> <code>src/rules.ts</code>; recheck the primary rule before editing.</p>
+        <p><strong>GitHub error handling:</strong> <code>classifyHttp</code> in <code>src/githubClient.ts</code>, then the matching fixture in <code>tests/githubClient.test.ts</code>.</p>
+        <p><strong>Filename or Missing semantics:</strong> <code>buildMachineReport</code> in <code>src/inspectionEngine.ts</code> and <code>tests/inspection.test.ts</code>. Preserve the complete-tree threshold.</p>
+        <p><strong>Noir Pink presentation:</strong> <code>src/App.tsx</code> and <code>src/styles.css</code>. Keep status words visible; color alone is not the result.</p>
+        <p><strong>Manual confirmation persistence:</strong> <code>src/manualConfirmationStore.ts</code> and <code>tests/manualConfirmationStore.test.ts</code>.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="practice-title">
+      <h2 id="practice-title">A practice to reuse</h2>
+      <p>The approved <code>devpost/spec.md</code> made “Missing only after a complete, commit-pinned file tree” a testable rule. <code>tests/inspection.test.ts</code> covers truncated and complete trees, and the live <code>octocat/Hello-World</code> check showed a one-entry complete tree with three Missing findings. On another evidence-based product, define the exact observation that permits each strong claim before building the UI around it.</p>
+    </section>
+
+    <section aria-labelledby="run-title">
+      <h2 id="run-title">Run it again</h2>
+      <p>From the project root, run <code>npm ci</code> and <code>npm run dev</code>; run <code>npm run test</code> for the trust-boundary fixtures. The public app is <a href="https://claraaaaaaaaaaa.github.io/clausemap/">claraaaaaaaaaaa.github.io/clausemap/</a>.</p>
+      <p class="lede">Source snapshot: <code>99e23a003c05a6696c7b6263edec62f4681ab28b</code>. This map describes that code state and may drift after later changes.</p>
+    </section>
+  </main>
+</body>
+</html>

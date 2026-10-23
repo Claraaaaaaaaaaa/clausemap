@@ -72,12 +72,12 @@ Build mode: fast
 
 - [ ] Learning activity complete — focused review of a real evidence-consistency or verification decision
 - [ ] Optional edit and transfer reflection addressed — offered/declined/already covered/not applicable as appropriate
-- [ ] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
+- [x] `devpost/app-map.html` generated from finished code, checked, and shown, including a project-grounded practice to reuse
 
-Activity and evidence: pending
-Route and stops: pending
+Activity and evidence: pending learner wrap-up; the map records the complete-tree threshold from `spec.md`, `tests/inspection.test.ts`, and the live `octocat/Hello-World` observation.
+Route and stops: reference route prepared in `devpost/app-map.html`; interactive review pending.
 Edit outcome: pending
 Reflection: pending
-Activity mode: pending
+Activity mode: focused alternative for a plan-first learner; not yet performed with the learner.
 
 ## Revisions
