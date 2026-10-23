@@ -39,4 +39,10 @@ Safari on `http://127.0.0.1:5173/`, 2026-10-23 03:14–03:15 UTC: entering `octo
 
 ## Gate 5 — production readiness
 
-Pending implementation and verification.
+Local production preparation, 2026-10-23 03:17–03:19 UTC:
+
+- `VITE_BASE_PATH=/clausemap/ npm run build` passed TypeScript and Vite. Emitted `dist/index.html` points to `/clausemap/assets/...` for JavaScript and CSS. The Google Fonts link is external with local font fallbacks. A source/bundle search found no prototype scenario selector, simulated repair, fabricated demo repository, Blush theme, or gradient function.
+- `VITE_BASE_PATH=/clausemap/ npm run preview -- --host 127.0.0.1` served the actual project path. Safari loaded `http://127.0.0.1:4173/clausemap/?repo=octocat%2FHello-World` on direct navigation and refresh, executed a new GitHub scan, and showed the correct real report. The first preview attempt omitted `VITE_BASE_PATH` and produced a blank page at the project path; restarting preview with the same base as the build resolved it. README now gives the correct paired commands.
+- Safari Responsive Design Mode at a 390×844 CSS viewport showed the five separate status counts, seven readable map nodes in a mobile grid, and the full-width Evidence Inspector. The drawer opened from a real Missing node and retained its rule, SHA, and action. This is Safari's responsive viewport, not a physical-phone or iOS Safari test.
+- A production-preview request for an intentionally unavailable public URL returned four `Unable to verify` machine findings, zero Missing/Verified, and an inspector explaining that GitHub's 404 does not establish whether the repo is nonexistent or invisible. No fallback mock appeared.
+- `npm run test`: 21 tests passed in 3 files. GitHub Pages workflow YAML parsed locally and follows Vite/GitHub's documented project Pages deployment pattern. The live GitHub Actions run, public Pages URL, and actual deployed-site refresh remain unverified because no remote or public release has been authorized. An owned public repo is also still needed to film a real Missing → fix → Verified transition.

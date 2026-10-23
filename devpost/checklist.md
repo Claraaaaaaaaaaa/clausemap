@@ -39,7 +39,7 @@ Build mode: fast
   Learner check: Compare the live desktop report and a phone-width view with V1.1; identify anything that weakens the intended hierarchy or makes a status hard to understand.
   Commit: `Build Fashion Noir inspection map and evidence interface`
 
-- [ ] **4. Human review survives refresh without becoming machine evidence**
+- [x] **4. Human review survives refresh without becoming machine evidence**
   Becomes usable: Video, eligibility, and Devpost-form nodes can be explicitly self-confirmed and undone; declarations persist for the same normalized repository, remain isolated from other repositories, and reset when local data is cleared.
   Why now: Manual review completes the seven-finding product after the machine-evidence path and map exist, without adding accounts or a backend.
   PRD ref: `prd.md > Manual review and self-confirmation`, `prd.md > Five status meanings`, `prd.md > Recheck and changed evidence`, `prd.md > States and Boundaries`
