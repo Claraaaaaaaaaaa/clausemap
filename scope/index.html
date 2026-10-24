@@ -119,6 +119,20 @@
     transform: scaleY(1.32) scaleX(.96);
   }
 }
+
+/* SCOPE: targeted type-size adjustment 2026-10-24 — leave all other UI and app logic intact. */
+.studioHero h1{font-size:clamp(42px,5vw,74px)}
+.sliderValue{font-size:26px}
+.resultBillboard .bigMoney{font-size:clamp(40px,4.6vw,64px)}
+#clientView .clientMain > h1{font-size:clamp(36px,4.5vw,50px)}
+#clientView .cRow.emphasis strong{font-size:clamp(21px,2.3vw,26px)}
+#clientView #clientTotalDays{font-size:23px!important}
+#clientView .cResult strong.heroMoney{font-size:clamp(28px,3vw,39px)}
+@media(max-width:680px){
+  .studioHero h1{font-size:clamp(36px,9vw,46px)}
+  #clientView .clientMain > h1{font-size:clamp(32px,8.5vw,42px)}
+  .resultBillboard .bigMoney{font-size:clamp(36px,10vw,48px)}
+}
 </style>
 <script>
 /* GitHub Pages adapter for the original SCOPE V0.9 user interface.
